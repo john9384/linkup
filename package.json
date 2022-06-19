@@ -1,0 +1,60 @@
+{
+	"name": "linkup-backend",
+	"version": "1.0.0",
+	"main": "src/bin/server.ts",
+	"repository": "https://github.com/john9384/linkup-backend.git",
+	"author": "John Damilola Ogungbure <jogungbure@gmail.com>",
+	"license": "MIT",
+	"scripts": {
+		"start": "ts-node dist/bin/server.js",
+		"predev": "yarn lint",
+		"dev": "nodemon",
+		"build": "tsc",
+		"lint": "eslint src/**/*.ts",
+		"lint:fix": "eslint src/**/*.ts --fix",
+		"typeorm": "typeorm-ts-node-esm",
+		"show-migration": "typeorm-ts-node-esm -d src/db/data-source.ts migration:show",
+		"run-migration": "typeorm-ts-node-esm -d src/db/data-source.ts migration:run",
+		"revert-migration": "typeorm-ts-node-esm -d src/db/data-source.ts migration:revert",
+		"list-routes": "ts-node src/scripts/route-list.ts",
+		"ci": "yarn lint && yarn build"
+	},
+	"husky": {
+		"hooks": {
+			"pre-commit": "yarn lint"
+		}
+	},
+	"dependencies": {
+		"@types/bcrypt": "^5.0.0",
+		"@types/cors": "^2.8.12",
+		"@types/express": "^4.17.13",
+		"@types/jsonwebtoken": "^8.5.8",
+		"@types/morgan": "^1.9.3",
+		"@types/nodemailer-smtp-transport": "^2.7.5",
+		"bcrypt": "^5.0.1",
+		"cors": "^2.8.5",
+		"dotenv": "^16.0.0",
+		"express": "^4.17.3",
+		"express-list-endpoints": "^6.0.0",
+		"joi": "^17.6.0",
+		"jsonwebtoken": "^8.5.1",
+		"morgan": "^1.10.0",
+		"nodemailer": "^6.7.5",
+		"nodemailer-smtp-transport": "^2.7.4",
+		"pg": "^8.7.3",
+		"reflect-metadata": "^0.1.13",
+		"ts-node": "^10.7.0",
+		"typeorm": "^0.3.5",
+		"typescript": "^4.6.3",
+		"winston": "^3.7.2"
+	},
+	"devDependencies": {
+		"@types/express-list-endpoints": "^6.0.0",
+		"@typescript-eslint/eslint-plugin": "^5.20.0",
+		"@typescript-eslint/parser": "^5.20.0",
+		"eslint": "^8.13.0",
+		"eslint-config-airbnb-typescript": "^17.0.0",
+		"eslint-plugin-import": "^2.26.0",
+		"husky": "^7.0.4"
+	}
+}

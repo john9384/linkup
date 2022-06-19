@@ -1,0 +1,121 @@
+{
+	"parser": "@typescript-eslint/parser",
+	"extends": [
+		"plugin:@typescript-eslint/recommended",
+		"airbnb-base",
+		"airbnb-typescript/base"
+	],
+	"ignorePatterns": ["*.log"],
+	"parserOptions": {
+		"ecmaVersion": "latest",
+		"sourceType": "module",
+		"project": "./tsconfig.json"
+	},
+	"env": {
+		"node": true
+	},
+	"globals": {
+		"NODE_ENV": true,
+		"isProduction": true,
+		"__ROUTE__": true
+	},
+	"rules": {
+		"arrow-parens": ["warn", "as-needed"],
+		"array-bracket-spacing": "off",
+		"block-spacing": "off",
+		"camelcase": ["warn", { "properties": "always" }],
+		"@typescript-eslint/naming-convention": "warn",
+		"class-methods-use-this": "off",
+		"comma-dangle": "warn",
+		"@typescript-eslint/comma-dangle": "warn",
+		"computed-property-spacing": ["warn", "never"],
+		"default-case": "warn",
+		"linebreak-style": "off",
+		"import/newline-after-import": "warn",
+		"indent": [
+			"warn",
+			"tab",
+			{
+				"SwitchCase": 1
+			}
+		],
+		"@typescript-eslint/indent": [
+			"warn",
+			"tab",
+			{
+				"SwitchCase": 1
+			}
+		],
+		"@typescript-eslint/lines-between-class-members": "off",
+		"max-classes-per-file": ["warn", 5],
+		"max-len": [
+			"off",
+			{
+				"code": 100,
+				"tabWidth": 2,
+				"ignoreUrls": true
+			}
+		],
+		"max-statements-per-line": ["warn", { "max": 1 }],
+		"new-cap": "warn",
+		"newline-per-chained-call": "off",
+		"no-case-declarations": "off",
+		"no-duplicate-imports": ["warn", { "includeExports": true }],
+		"no-empty-function": "warn",
+		"@typescript-eslint/no-empty-interface": "warn",
+		"no-eval": "warn",
+		"import/no-extraneous-dependencies": [
+			"error",
+			{
+				"devDependencies": false,
+				"optionalDependencies": false,
+				"peerDependencies": false,
+				"packageDir": "./"
+			}
+		],
+		"no-irregular-whitespace": "warn",
+		"no-multiple-empty-lines": ["warn", { "max": 1 }],
+		"no-plusplus": "off",
+		"no-tabs": ["off", { "allowIndentationTabs": true }],
+		"no-trailing-spaces": "warn",
+		"no-unreachable": "warn",
+		"no-unused-vars": [
+			"warn",
+			{
+				"vars": "all",
+				"args": "after-used",
+				"ignoreRestSiblings": false,
+				"argsIgnorePattern": "^next"
+			}
+		],
+		"@typescript-eslint/no-unused-vars": [
+			"warn",
+			{
+				"vars": "all",
+				"args": "after-used",
+				"ignoreRestSiblings": false,
+				"argsIgnorePattern": "^next"
+			}
+		],
+		"no-var": "warn",
+		"object-curly-spacing": ["warn", "always"],
+		"object-curly-newline": "off",
+		"@typescript-eslint/object-curly-spacing": ["warn", "always"],
+		"prefer-const": "off",
+		"import/prefer-default-export": "off",
+		"quotes": ["warn", "single"],
+		"@typescript-eslint/quotes": ["warn", "single"],
+		"semi": ["warn", "never"],
+		"@typescript-eslint/semi": ["warn", "never"]
+	},
+	"overrides": [
+		{
+			"files": ["src/scripts/*.ts", "src/db/migrations/*.ts"],
+			"rules": {
+				"no-console": "off",
+				"quotes": "off",
+				"@typescript-eslint/quotes": "off"
+			}
+		}
+	]
+}
