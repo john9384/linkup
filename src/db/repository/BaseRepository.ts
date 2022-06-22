@@ -14,7 +14,7 @@ class BaseRepository {
 
 	async fetchOne<TQuery, TReturn>(query: TQuery): Promise<TReturn | null> {
 		const entity = await this.Model.find(query)
-		return entity
+		return entity[0]
 	}
 
 	async create<TCreate, TReturn>(data: TCreate): Promise<TReturn> {

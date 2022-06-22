@@ -6,6 +6,7 @@ export interface ICreateUser {
 	lastName: string
 	email: string
 	password: string
+	username?: string
 }
 
 export interface IUpdateUser {}
