@@ -1,138 +1,73 @@
-// import {
-// 	Entity,
-// 	PrimaryGeneratedColumn,
-// 	Column,
-// 	BaseEntity,
-// 	CreateDateColumn,
-// 	UpdateDateColumn,
-// } from 'typeorm'
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { Schema, model } from 'mongoose'
 
-// @Entity({ name: 'users' })
-// export class User extends BaseEntity {
-// 	@PrimaryGeneratedColumn('uuid')
-// 	id: string
+const userSchema = new Schema(
+	{
+		firstname: {
+			type: String,
+			trim: true,
+		},
+		lastname: {
+			type: String,
+			trim: true,
+		},
+		email: {
+			type: String,
+			unique: true,
+			lowercase: true,
+			required: true,
+			trim: true,
+		},
+		password: {
+			type: String,
+			trim: true,
+			required: true,
+		},
+		username: {
+			type: String,
+			trim: true,
+		},
+		phone: {
+			type: String,
+			trim: true,
+		},
+		avatar: {
+			type: String,
+			trim: true,
+			defualt: 'Hello',
+		},
+		bgImgUrl: {
+			type: String,
+			trim: true,
+		},
+		gender: {
+			type: String,
+			trim: true,
+		},
+		religion: {
+			type: String,
+			trim: true,
+		},
+		location: {
+			type: String,
+			trim: true,
+		},
+		emailVerified: {
+			type: Boolean,
+			default: false,
+		},
+		phoneVerified: {
+			type: Boolean,
+			default: false,
+		},
+	},
+	{
+		timestamps: true,
+		toJSON: {
+			virtuals: true,
+		},
+		collection: 'users',
+	},
+)
 
-// 	@Column({ nullable: false })
-// 	firstName: string
-
-// 	@Column({ nullable: false })
-// 	lastName: string
-
-// 	@Column({
-// 		unique: true,
-// 		nullable: false,
-// 	})
-// 	email: string
-
-// 	@Column({ nullable: false })
-// 	password: string
-
-// 	@Column({
-// 		type: 'set',
-// 		enum: [null, 'MALE', 'FEMALE'],
-// 		default: [null],
-// 	})
-// 	gender: GenderType
-
-// 	@Column()
-// 	phone: string
-
-// 	@Column()
-// 	location: string
-
-// 	@Column({
-// 		default: false,
-// 	})
-// 	emailVerified: boolean
-
-// 	@Column({
-// 		default: false,
-// 	})
-// 	phoneVerified: boolean
-
-// 	@Column({
-// 		default: false,
-// 	})
-// 	isVendor: boolean
-
-// 	@Column({
-// 		default: false,
-// 	})
-// 	isFreelancer: boolean
-
-// 	@Column({
-// 		default: false,
-// 	})
-// 	isBlogger: boolean
-
-// 	@Column({
-// 		default: false,
-// 	})
-// 	isPremium: boolean
-
-// 	@Column({
-// 		default: false,
-// 	})
-// 	isSubscribed: boolean
-
-// 	@CreateDateColumn()
-// 	createdAt: Date
-
-// 	@UpdateDateColumn()
-// 	updatedAt: Date
-// }
-
-// export type GenderType = 'MALE' | 'FEMALE'
-
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm'
-
-@Entity('users')
-export class User extends BaseEntity {
-	@PrimaryGeneratedColumn('uuid')
-	id: number
-
-	@Column()
-	firstName: string
-
-	@Column()
-	lastName: string
-
-	@Column()
-	email: string
-
-	@Column()
-	password: string
-
-	@Column()
-	username: string
-
-	@Column()
-	avatar: string
-
-	@Column()
-	bgImgUrl: string
-
-	@Column()
-	phone: string
-
-	@Column()
-	gender: string
-
-	@Column()
-	religion: string
-
-	@Column()
-	location: string
-
-	@Column()
-	emailVerified: string
-
-	@Column()
-	phoneVerified: string
-
-	@Column()
-	createdAt: Date
-
-	@Column()
-	updatedAt: Date
-}
+export const User = model('user', userSchema)

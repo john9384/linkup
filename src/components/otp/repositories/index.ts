@@ -8,7 +8,7 @@ import { ICreateOtp, IQueryOtp } from '../types/dtos'
 
 class OtpRepository extends BaseRepository {
 	fetchOneOtp = async (query: IQueryOtp): Promise<IOtp | null> => {
-		const otp = await Otp.findOneBy(query)
+		const otp = await this.Model.fetchOne(query)
 
 		return otp
 	}

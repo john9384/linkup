@@ -13,13 +13,12 @@ class BaseRepository {
 	}
 
 	async fetchOne<TQuery, TReturn>(query: TQuery): Promise<TReturn | null> {
-		const entity = await this.Model.find(query)
-		return entity[0]
+		const entity = await this.Model.findOne(query)
+		return entity
 	}
 
 	async create<TCreate, TReturn>(data: TCreate): Promise<TReturn> {
 		const entity = await this.Model.create(data)
-		await entity.save()
 
 		return entity
 	}
@@ -28,14 +27,13 @@ class BaseRepository {
 		query: TQuery,
 		data: TUpdate,
 	): Promise<TReturn | null> {
-		const entity = await this.Model.findOneBy(query)
-		await entity.save(data)
+		const entity = await this.Model.findOneAndUpdate(query, data, {new: true})
 
 		return entity
 	}
 
 	async destroy<TQuery>(query: TQuery): Promise<boolean> {
-		this.Model.delete(query)
+		this.Model.findOneAndDelete(query)
 
 		return true
 	}

@@ -1,11 +1,11 @@
-import 'reflect-metadata'
 import http from 'http'
 import cluster from 'cluster'
 import os from 'os'
-import Logger from '../library/helpers/loggers'
+// eslint-disable-next-line import/no-extraneous-dependencies
+import mongoose from 'mongoose'
 import config from '../config'
+import Logger from '../library/helpers/loggers'
 import app from '../app'
-import DatabaseConnection from '../db/data-source'
 import { IError } from '../library/helpers/error'
 
 const PORT = config.APP_PORT || 4000
@@ -22,7 +22,8 @@ if (cluster.isPrimary) {
 		cluster.fork()
 	})
 } else {
-	DatabaseConnection.initialize()
+	mongoose
+		.connect(String(config.MONGO_URI), {})
 		.then(() => {
 			Logger.info('------- Database Connected -------')
 		})

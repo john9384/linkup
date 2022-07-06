@@ -19,6 +19,7 @@ const config = {
 	CRYPTO_ENCRYPTION_METHOD: process.env.CRYPTO_ENCRYPTION_METHOD,
 	CRYPTO_SECRET_IV: process.env.CRYPTO_SECRET_IV,
 	CRYPTO_SECRET_KEY: process.env.CRYPTO_SECRET_KEY,
+	MONGO_URI: process.env.MONGO_URI,
 	DB_TYPE: process.env.DB_TYPE,
 	DB_HOST: process.env.DB_HOST,
 	DB_PORT: process.env.DB_PORT,

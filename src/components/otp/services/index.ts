@@ -1,5 +1,5 @@
 import Logger from '../../../library/helpers/loggers'
-import { sendMail } from '../../../library/helpers/mail'
+// import { sendMail } from '../../../library/helpers/mail'
 import { validateFormData } from '../../../library/utils/validate-form-data'
 import { ICreateOtp } from '../types/dtos'
 import { IOtp } from '../types/model'
@@ -22,12 +22,12 @@ export const request = async (formData: ICreateOtp): Promise<object> => {
 		Logger.info('Phone otp not supported')
 	}
 
-	await sendMail({
-		mailContent: 'otp',
-		content: otp.token || '',
-		subject: 'Kago OTP service',
-		to: otp.transporter,
-	})
+	// sendMail({
+	// 	mailContent: 'otp',
+	// 	content: otp.token || '',
+	// 	subject: 'Kago OTP service',
+	// 	to: otp.transporter,
+	// })
 
 	return { [transporterType.toLowerCase()]: transporter }
 }

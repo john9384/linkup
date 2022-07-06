@@ -6,7 +6,6 @@ import { IUser } from '../types/model'
 class UserRepository extends BaseRepository {
 	fetchOneUser = async (query: IQueryUser): Promise<IUser | null> => {
 		const user = await this.fetchOne<IQueryUser, IUser>(query)
-
 		return user
 	}
 

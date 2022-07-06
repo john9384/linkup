@@ -14,8 +14,11 @@ export const createUser = async (data: ICreateUser): Promise<IUser> => {
 			status: BAD_REQUEST,
 		})
 	}
-	const username = generateUsername(data.firstName, data.lastName)
-	const newUser = await userRepository.createUser({ ...data, username })
+	const username = generateUsername(data.firstname, data.lastname)
+	const newUser = await userRepository.createUser({
+		...data,
+		username,
+	})
 
 	return newUser
 }
@@ -25,7 +28,8 @@ export const updateUser = async (
 	data: IUpdateUser,
 ): Promise<IUser | null> => {
 	const user = await userRepository.updateUser(query, data)
-
+	// Todo
+	// Hash neccessary field befor update
 	return user
 }
 
