@@ -1,5 +1,5 @@
-import * as otpService from './services'
-import * as otpController from './controllers'
-import otpRouter from './routes'
+import otpService from './otpService'
+import otpController from './otpController'
+import otpRouter from './otpRoutes'
 
 export { otpController, otpService, otpRouter }

@@ -25,11 +25,11 @@ function generateComponent(name: string) {
 
 		console.log(`
     generated files
-      ${dir}/${name.toLowerCase()}.controller.ts
-      ${dir}/${name.toLowerCase()}.services.ts
-      ${dir}/${name.toLowerCase()}.model.ts
-      ${dir}/${name.toLowerCase()}.routes.ts
-      ${dir}/${name.toLowerCase()}.types.ts
+      ${dir}/${name.toLowerCase()}Controller.ts
+      ${dir}/${name.toLowerCase()}Service.ts
+      ${dir}/${name.toLowerCase()}Model.ts
+      ${dir}/${name.toLowerCase()}Routes.ts
+      ${dir}/${name.toLowerCase()}Type.ts
     `)
 	} catch (err: any) {
 		console.log(err.message)

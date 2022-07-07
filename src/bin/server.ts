@@ -1,12 +1,10 @@
 import http from 'http'
 import cluster from 'cluster'
 import os from 'os'
-// eslint-disable-next-line import/no-extraneous-dependencies
-import mongoose from 'mongoose'
 import config from '../config'
 import Logger from '../library/helpers/loggers'
 import app from '../app'
-import { IError } from '../library/helpers/error'
+import ConnectDatabase from '../db'
 
 const PORT = config.APP_PORT || 4000
 
@@ -22,15 +20,7 @@ if (cluster.isPrimary) {
 		cluster.fork()
 	})
 } else {
-	mongoose
-		.connect(String(config.MONGO_URI), {})
-		.then(() => {
-			Logger.info('------- Database Connected -------')
-		})
-		.catch((error: IError) => {
-			Logger.error('------ Database Connection Failed -------')
-			Logger.error(error)
-		})
+	ConnectDatabase()
 
 	new http.Server(app).listen(PORT, () => {
 		Logger.info(`

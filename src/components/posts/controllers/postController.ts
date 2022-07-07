@@ -1,12 +1,12 @@
 import { IRequest, IResponse } from '../../../app/types/http'
 import { buildResponse } from '../../../library/utils/response-builder'
 import { OK } from '../../../library/constants/http-status'
-import userService from '../services/userService'
-import { IUpdateUser } from '../types/dtos'
+import postService from '../services/postService'
+import { IUpdatePost } from '../types/formTypes'
 
-class UserController {
-	getUsers = async (req: IRequest, res: IResponse) => {
-		const users = await userService.fetchUsers()
+class PostController {
+	getPosts = async (req: IRequest, res: IResponse) => {
+		const users = await postService.fetchPosts()
 		// TODO
 		// Make room for fetching with query parameters
 		// Make room for pagination
@@ -15,15 +15,15 @@ class UserController {
 		return res.status(OK).send(
 			buildResponse({
 				success: true,
-				message: 'User fetched',
+				message: 'Post fetched',
 				data: responseData,
 			}),
 		)
 	}
 
-	getUserById = async (req: IRequest, res: IResponse) => {
+	getPostById = async (req: IRequest, res: IResponse) => {
 		const userId = req.params.id
-		const user = await userService.fetchOneUser({ id: userId })
+		const user = await postService.fetchOnePost({ id: userId })
 		const responseData = user
 
 		return res.status(OK).send(
@@ -35,11 +35,11 @@ class UserController {
 		)
 	}
 
-	updateUser = async (req: IRequest<IUpdateUser>, res: IResponse) => {
+	updatePost = async (req: IRequest<IUpdatePost>, res: IResponse) => {
 		const userId = req.params.id
 		const formData = req.body
-		const updatedUser = await userService.updateUser({ id: userId }, formData)
-		const responseData = updatedUser
+		const updatedPost = await postService.updatePost({ id: userId }, formData)
+		const responseData = updatedPost
 
 		return res.status(OK).send(
 			buildResponse({
@@ -51,4 +51,4 @@ class UserController {
 	}
 }
 
-export default new UserController()
+export default new PostController()

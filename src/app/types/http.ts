@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 
 interface User {
-	id: string | number
+	id: string
 	email: string
 }
 export interface IRequest<T = null> extends Request {

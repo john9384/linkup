@@ -4,13 +4,11 @@ export interface IResponseData {
 interface IBuildResponse {
 	success: boolean
 	message: string
-	data: IResponseData
+	data: IResponseData | null
 }
 
-export const buildResponse = ({ success, message, data }: IBuildResponse) => {
-	return {
-		success,
-		message,
-		data,
-	}
-}
+export const buildResponse = ({ success, message, data }: IBuildResponse) => ({
+	success,
+	message,
+	data,
+})

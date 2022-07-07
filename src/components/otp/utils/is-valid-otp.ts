@@ -1,7 +1,7 @@
 import * as DATE_UTILS from '../../../library/utils/date-utils'
 import { ValidationError } from '../../../library/helpers/error'
 import { BAD_REQUEST } from '../../../library/constants/http-status'
-import otpRepository from '../repositories'
+import otpRepository from '../otpRepository'
 import { IOtp } from '../types/model'
 
 export const otpIsValid = async (token: string): Promise<IOtp> => {

@@ -4,6 +4,10 @@ import { ICreateUser, IUpdateUser, IQueryUser } from '../types/dtos'
 import { IUser } from '../types/model'
 
 class UserRepository extends BaseRepository {
+	fetchUsers = async (query?: IQueryUser): Promise<IUser[] | null> => {
+		const users = await this.fetch<IQueryUser, IUser[]>(query)
+		return users
+	}
 	fetchOneUser = async (query: IQueryUser): Promise<IUser | null> => {
 		const user = await this.fetchOne<IQueryUser, IUser>(query)
 		return user

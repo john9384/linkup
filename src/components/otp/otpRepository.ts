@@ -1,10 +1,10 @@
-import { ValidationError } from '../../../library/helpers/error'
-import { BAD_REQUEST } from '../../../library/constants/http-status'
-import { generateOTP } from '../../../library/utils/otp-generator'
-import BaseRepository from '../../../db/repository/BaseRepository'
-import { IOtp } from '../types/model'
-import { Otp } from '../models/Otp'
-import { ICreateOtp, IQueryOtp } from '../types/dtos'
+import { ValidationError } from '../../library/helpers/error'
+import { BAD_REQUEST } from '../../library/constants/http-status'
+import { generateOTP } from '../../library/utils/otp-generator'
+import BaseRepository from '../../db/repository/BaseRepository'
+import { IOtp } from './types/model'
+import { Otp } from './models/Otp'
+import { ICreateOtp, IQueryOtp } from './types/dtos'
 
 class OtpRepository extends BaseRepository {
 	fetchOneOtp = async (query: IQueryOtp): Promise<IOtp | null> => {
