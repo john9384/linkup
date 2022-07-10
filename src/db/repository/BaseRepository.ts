@@ -1,5 +1,7 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { ObjectId } from 'mongodb'
 class BaseRepository {
 	Model: any
 
@@ -7,13 +9,18 @@ class BaseRepository {
 		this.Model = Model
 	}
 
-	async fetch<TQuery, TReturn>(query?: TQuery): Promise<TReturn> {
-		const models = await this.Model.find(query)
+	async fetch<TQuery, TReturn>(query?: TQuery, fields?: any): Promise<TReturn> {
+		const queryObj = this.setQueryObj(query)
+		const models = await this.Model.find(queryObj).select(fields)
 		return models
 	}
 
-	async fetchOne<TQuery, TReturn>(query: TQuery): Promise<TReturn | null> {
-		const model = await this.Model.findOne(query)
+	async fetchOne<TQuery, TReturn>(
+		query: TQuery,
+		fields?: any,
+	): Promise<TReturn | null> {
+		const queryObj = this.setQueryObj(query)
+		const model = await this.Model.findOne(queryObj).select(fields)
 		return model
 	}
 
@@ -27,15 +34,38 @@ class BaseRepository {
 		query: TQuery,
 		data: TUpdate,
 	): Promise<TReturn | null> {
-		const model = await this.Model.findOneAndUpdate(query, data, { new: true })
+		const queryObj = this.setQueryObj(query)
+		const model = await this.Model.findOneAndUpdate(queryObj, data, {
+			new: true,
+		})
+
+		await model.save()
 
 		return model
 	}
 
 	async destroy<TQuery>(query: TQuery): Promise<boolean> {
-		this.Model.findOneAndDelete(query)
+		const queryObj = this.setQueryObj(query)
+		await this.Model.deleteOne(queryObj)
 
 		return true
+	}
+
+	private setQueryObj(obj: any) {
+		if (!obj) return null
+		// eslint-disable-next-line no-prototype-builtins
+		if (obj.hasOwnProperty('id')) {
+			// eslint-disable-next-line @typescript-eslint/naming-convention
+			const _id = new ObjectId(obj.id)
+			// eslint-disable-next-line no-param-reassign
+			delete obj.id
+
+			return {
+				_id,
+				...obj,
+			}
+		}
+		return obj
 	}
 }
 

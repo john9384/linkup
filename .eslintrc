@@ -29,6 +29,7 @@
 		"comma-dangle": "warn",
 		"@typescript-eslint/comma-dangle": "warn",
 		"computed-property-spacing": ["warn", "never"],
+		"consistent-return": "off",
 		"default-case": "warn",
 		"linebreak-style": "off",
 		"implicit-arrow-linebreak": "off",
@@ -80,6 +81,7 @@
 		"no-tabs": ["off", { "allowIndentationTabs": true }],
 		"no-trailing-spaces": "warn",
 		"no-unreachable": "warn",
+		"@typescript-eslint/no-unused-expressions": "off",
 		"no-unused-vars": [
 			"warn",
 			{
@@ -98,6 +100,7 @@
 				"argsIgnorePattern": "^next"
 			}
 		],
+
 		"no-var": "warn",
 		"object-curly-spacing": ["warn", "always"],
 		"object-curly-newline": "off",

@@ -1,46 +1,28 @@
-import { ValidationError } from '../../library/helpers/error'
-import { BAD_REQUEST } from '../../library/constants/http-status'
 import { generateOTP } from '../../library/utils/otp-generator'
 import BaseRepository from '../../db/repository/BaseRepository'
-import { IOtp } from './types/model'
+import { IOtp } from './types/modelTypes'
 import { Otp } from './models/Otp'
-import { ICreateOtp, IQueryOtp } from './types/dtos'
+import { ICreateOtp, IQueryOtp } from './types/formTypes'
 
 class OtpRepository extends BaseRepository {
 	fetchOneOtp = async (query: IQueryOtp): Promise<IOtp | null> => {
-		const otp = await this.Model.fetchOne(query)
+		const otp = await this.fetchOne<IQueryOtp, IOtp>(query)
 
 		return otp
 	}
 
-	createUser = async ({ userId, transporter, transporterType }: ICreateOtp) => {
-		if (transporterType && !['EMAIL', 'PHONE'].includes(transporterType)) {
-			throw new ValidationError({
-				message:
-					'Invalid transporterType. transporterType is either EMAIL or PHONE',
-				status: BAD_REQUEST,
-			})
-		}
-
-		const otp = await this.fetchOneOtp({
-			transporter,
-			transporterType,
-		})
-
-		if (otp) {
-			const updatedOtp = await this.updateOtp({
-				transporter,
-				transporterType,
-			})
-
-			return updatedOtp
-		}
-
+	createOtp = async ({
+		userId,
+		transporter,
+		transporterType,
+		instance,
+	}: ICreateOtp) => {
 		let { token, expiryTime } = generateOTP()
 		let newOtp = await this.create<ICreateOtp, IOtp>({
 			userId,
 			transporter,
 			transporterType,
+			instance,
 			token,
 			tokenExpires: expiryTime,
 		})

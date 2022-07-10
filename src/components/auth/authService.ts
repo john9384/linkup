@@ -1,48 +1,48 @@
-import { validateFormData } from '../../library/utils/validate-form-data'
 import { jwtEncode } from '../../library/helpers/jwt'
 import { bcryptCompare, bcryptEncode } from '../../library/helpers/bcrypt'
 import { CustomError, ValidationError } from '../../library/helpers/error'
 import { BAD_REQUEST } from '../../library/constants/http-status'
+import { generateUsername } from '../../library/utils/username-generator'
 import { userService } from '../user'
 import { otpService } from '../otp'
 import { ISignup, ILogin } from './types/forms'
 import { IUser } from '../user/types/model'
 import { otpIsValid } from '../otp/utils/is-valid-otp'
 import userRepository from '../user/repositories'
-import {
-	VSignup,
-	VLogin,
-	VToken,
-	VForgotPassword,
-	VResetPassword,
-} from './utils/validators'
 
 class AuthService {
 	signup = async (formData: ISignup) => {
-		validateFormData(VSignup, formData)
-
 		const password = await bcryptEncode(formData.password)
 		const { firstname, lastname, email } = formData
+		const user = await userRepository.fetchOneUser({ email })
 
-		const newUser: IUser = await userService.createUser({
+		if (user) {
+			throw new CustomError({
+				message: 'User with email exits',
+				status: BAD_REQUEST,
+			})
+		}
+
+		const username = generateUsername(firstname, lastname)
+		const newUser: IUser = await userRepository.createUser({
 			firstname,
 			lastname,
 			email,
 			password,
+			username,
 		})
 
 		otpService.request({
 			userId: newUser.id,
 			transporter: newUser.email,
 			transporterType: 'EMAIL',
+			instance: 'SIGNUP',
 		})
 
 		return { email: newUser.email }
 	}
 
 	login = async (formData: ILogin) => {
-		validateFormData(VLogin, formData)
-
 		const { email, password } = formData
 		const user = await userService.fetchOneUser({ email })
 
@@ -63,9 +63,12 @@ class AuthService {
 	}
 
 	verifyEmail = async (formData: any) => {
-		validateFormData(VToken, formData)
-
 		const otp = await otpIsValid(formData.token)
+
+		await userRepository.updateUser(
+			{ email: otp.transporter },
+			{ emailVerified: true },
+		)
 
 		return {
 			email: otp.transporter,
@@ -73,8 +76,6 @@ class AuthService {
 	}
 
 	forgotPassword = async (formData: any) => {
-		validateFormData(VForgotPassword, formData)
-
 		const userExist: any = await userRepository.fetchOneUser({
 			email: formData.email,
 		})
@@ -90,6 +91,7 @@ class AuthService {
 			userId: userExist.id,
 			transporter: userExist.email,
 			transporterType: 'EMAIL',
+			instance: 'LOGIN',
 		})
 
 		return {
@@ -99,34 +101,21 @@ class AuthService {
 	}
 
 	verifyToken = async (formData: any) => {
-		validateFormData(VToken, formData)
-
 		const otp = await otpIsValid(formData.token)
 
 		return {
 			email: otp.transporter,
-			token: otp.token,
 		}
 	}
 
 	resetPassword = async (formData: any) => {
-		validateFormData(VResetPassword, formData)
-
-		const otp = await otpIsValid(formData.token)
-		const userExist: any = await userRepository.fetchOneUser({
+		const userExist = await userRepository.fetchOneUser({
 			email: formData.email,
 		})
 
 		if (!userExist) {
 			throw new CustomError({
 				message: 'Invalid Email',
-				status: BAD_REQUEST,
-			})
-		}
-
-		if (otp.transporter !== userExist.email) {
-			throw new CustomError({
-				message: 'Email and token mismatch',
 				status: BAD_REQUEST,
 			})
 		}

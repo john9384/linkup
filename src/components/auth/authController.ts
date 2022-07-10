@@ -3,10 +3,19 @@ import { CREATED, OK } from '../../library/constants/http-status'
 import { buildResponse } from '../../library/utils/response-builder'
 import authService from './authService'
 import { ILogin, ISignup } from './types/forms'
+import { validateFormData } from '../../library/utils/validate-form-data'
+import {
+	VSignup,
+	VLogin,
+	VToken,
+	VForgotPassword,
+	VResetPassword,
+} from './utils/validators'
 
 class AuthController {
 	signup = async (req: IRequest<ISignup>, res: IResponse) => {
 		const formData = req.body
+		validateFormData(VSignup, formData)
 
 		const responseData = await authService.signup(formData)
 
@@ -21,6 +30,7 @@ class AuthController {
 
 	login = async (req: IRequest<ILogin>, res: IResponse) => {
 		const formData = req.body
+		validateFormData(VLogin, formData)
 
 		const responseData = await authService.login(formData)
 
@@ -35,6 +45,7 @@ class AuthController {
 
 	verifyEmail = async (req: IRequest, res: IResponse) => {
 		const formData = req.body
+		validateFormData(VToken, formData)
 
 		const responseData = await authService.verifyEmail(formData)
 
@@ -49,13 +60,14 @@ class AuthController {
 
 	forgotPassword = async (req: IRequest, res: IResponse) => {
 		const formData = req.body
+		validateFormData(VForgotPassword, formData)
 
 		const responseData = await authService.forgotPassword(formData)
 
 		return res.status(OK).send(
 			buildResponse({
 				success: true,
-				message: 'User logged in',
+				message: 'Successful',
 				data: responseData,
 			}),
 		)
@@ -63,13 +75,14 @@ class AuthController {
 
 	verifyToken = async (req: IRequest, res: IResponse) => {
 		const formData = req.body
+		validateFormData(VToken, formData)
 
 		const responseData = await authService.verifyToken(formData)
 
 		return res.status(OK).send(
 			buildResponse({
 				success: true,
-				message: 'User logged in',
+				message: 'Token verified',
 				data: responseData,
 			}),
 		)
@@ -77,13 +90,14 @@ class AuthController {
 
 	resetPassword = async (req: IRequest, res: IResponse) => {
 		const formData = req.body
+		validateFormData(VResetPassword, formData)
 
 		const responseData = await authService.resetPassword(formData)
 
 		return res.status(OK).send(
 			buildResponse({
 				success: true,
-				message: 'User logged in',
+				message: 'Password Reset successful',
 				data: responseData,
 			}),
 		)

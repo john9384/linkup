@@ -2,7 +2,7 @@ import * as DATE_UTILS from '../../../library/utils/date-utils'
 import { ValidationError } from '../../../library/helpers/error'
 import { BAD_REQUEST } from '../../../library/constants/http-status'
 import otpRepository from '../otpRepository'
-import { IOtp } from '../types/model'
+import { IOtp } from '../types/modelTypes'
 
 export const otpIsValid = async (token: string): Promise<IOtp> => {
 	const otp: IOtp | null = await otpRepository.fetchOne({ token })
@@ -19,6 +19,8 @@ export const otpIsValid = async (token: string): Promise<IOtp> => {
 			status: BAD_REQUEST,
 		})
 	}
+
+	otp.id && (await otpRepository.destroyOtp({ id: otp.id }))
 
 	return otp
 }

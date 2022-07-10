@@ -8,6 +8,6 @@ const router = express.Router()
 const { API_PREFIX } = config
 
 router.use(`/${API_PREFIX}/auth`, authRouter)
-router.use(`/${API_PREFIX}/user`, userRouter)
+router.use(`/${API_PREFIX}/users`, userRouter)
 
 export default router

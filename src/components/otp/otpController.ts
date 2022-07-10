@@ -2,7 +2,7 @@ import { IRequest, IResponse } from '../../app/types/http'
 import { OK } from '../../library/constants/http-status'
 import { buildResponse } from '../../library/utils/response-builder'
 import otpService from './otpService'
-import { ICreateOtp, IValidateOtp } from './types/dtos'
+import { ICreateOtp, IValidateOtp } from './types/formTypes'
 
 class OtpController {
 	requestOtp = async (req: IRequest<ICreateOtp>, res: IResponse) => {

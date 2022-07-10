@@ -1,0 +1,56 @@
+[
+  {
+    "avatar": "http://placehold.it/32x32",
+    "firstname": "Walton",
+    "lastname": "Lambert",
+    "email": "waltonlambert@octocore.com",
+    "phone": "+1 (919) 598-2272",
+    "emailVerified": true,
+    "phoneVerified": false
+  },
+  {
+    "avatar": "http://placehold.it/32x32",
+    "firstname": "Gregory",
+    "lastname": "Wise",
+    "email": "gregorywise@octocore.com",
+    "phone": "+1 (928) 402-3613",
+    "emailVerified": true,
+    "phoneVerified": false
+  },
+  {
+    "avatar": "http://placehold.it/32x32",
+    "firstname": "Acevedo",
+    "lastname": "Wallace",
+    "email": "acevedowallace@octocore.com",
+    "phone": "+1 (877) 598-2492",
+    "emailVerified": false,
+    "phoneVerified": false
+  },
+  {
+    "avatar": "http://placehold.it/32x32",
+    "firstname": "Thomas",
+    "lastname": "King",
+    "email": "thomasking@octocore.com",
+    "phone": "+1 (965) 513-2017",
+    "emailVerified": true,
+    "phoneVerified": false
+  },
+  {
+    "avatar": "http://placehold.it/32x32",
+    "firstname": "Jackie",
+    "lastname": "Brady",
+    "email": "jackiebrady@octocore.com",
+    "phone": "+1 (896) 566-3459",
+    "emailVerified": true,
+    "phoneVerified": false
+  },
+  {
+    "avatar": "http://placehold.it/32x32",
+    "firstname": "West",
+    "lastname": "Williamson",
+    "email": "westwilliamson@octocore.com",
+    "phone": "+1 (867) 598-2438",
+    "emailVerified": false,
+    "phoneVerified": true
+  }
+]

@@ -6,5 +6,5 @@ export const generateUsername = (
 	let code = `${timestamp}`.substring(9, 13)
 	const first = firstname.substring(0, 4)
 	const last = lastname.substring(0, 4)
-	return `${first}.${last}${code}`
+	return `${first.toLowerCase()}${last.toLowerCase()}${code}`
 }

@@ -8,7 +8,6 @@ const otpSchema = new Schema(
 		},
 		transporter: {
 			type: String,
-			unique: true,
 			lowercase: true,
 			trim: true,
 		},
@@ -16,6 +15,10 @@ const otpSchema = new Schema(
 			type: String,
 			trim: true,
 			default: 'EMAIL',
+		},
+		instance: {
+			type: String,
+			trim: true,
 		},
 		token: {
 			type: String,
