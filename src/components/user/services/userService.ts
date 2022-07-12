@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import { IUser } from '../types/model'
-import { IQueryUser, IUpdateUser } from '../types/dtos'
+import { ICreateUser, IQueryUser, IUpdateUser } from '../types/dtos'
 import userRepository from '../repositories/userRepository'
 import { bcryptEncode } from '../../../library/helpers/bcrypt'
 import { CustomError } from '../../../library/helpers/error'
@@ -8,16 +8,40 @@ import { generateUsername } from '../../../library/utils/username-generator'
 import { BAD_REQUEST } from '../../../library/constants/http-status'
 
 class UserService {
-	fetchUsers = async (query?: IQueryUser): Promise<IUser[] | null> => {
+	fetchUsers = async (
+		query?: IQueryUser,
+		fields?: string[],
+	): Promise<(Partial<IUser> | null)[]> => {
 		const users = await userRepository.fetchUsers(query)
-		return users
+
+		if (!users) return []
+
+		if (fields) {
+			return users.map(user => this.serialize(user, fields))
+		}
+
+		return users.map(user =>
+			this.serialize(user, [
+				'id',
+				'firstname',
+				'lastname',
+				'email',
+				'username',
+				'phone',
+				'emailVerified',
+				'phoneVerified',
+			]),
+		)
 	}
 
 	fetchOneUser = async (
 		query: IQueryUser,
 		fields?: string[],
 	): Promise<Partial<IUser | null>> => {
-		const user: any = await userRepository.fetchOneUser(query)
+		const user = await userRepository.fetchOneUser(query)
+
+		if (!user) return null
+
 		if (fields) {
 			return this.serialize(user, fields)
 		}
@@ -34,7 +58,7 @@ class UserService {
 		])
 	}
 
-	createUser = async (formData: any): Promise<IUser> => {
+	createUser = async (formData: ICreateUser): Promise<IUser> => {
 		const { firstname, lastname, email } = formData
 		const user = await this.fetchOneUser({ email }, ['email'])
 

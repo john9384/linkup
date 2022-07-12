@@ -4,16 +4,48 @@ import { IQueryUser, IUpdateUser } from '../types/dtos'
 import userRepository from '../repositories/userRepository'
 
 class ProfileService {
-	fetchProfiles = async (query?: IQueryUser): Promise<IUser[] | null> => {
-		const users = await userRepository.fetchUsers(query)
-		return users
+	fetchProfiles = async (
+		query?: IQueryUser,
+		fields?: string[],
+	): Promise<(Partial<IUser> | null)[]> => {
+		const users: IUser[] | null = await userRepository.fetchUsers(query)
+
+		if (!users) return []
+
+		if (fields) {
+			return users.map(user => this.serialize(user, fields))
+		}
+
+		const serializedUsers = users.map(user =>
+			this.serialize(user, [
+				'id',
+				'firstname',
+				'lastname',
+				'fullname',
+				'email',
+				'username',
+				'phone',
+				'avatar',
+				'bgImgUrl',
+				'gender',
+				'religion',
+				'location',
+				'emailVerified',
+				'phoneVerified',
+			]),
+		)
+
+		return serializedUsers
 	}
 
 	fetchOneProfile = async (
 		query: IQueryUser,
 		fields?: string[],
 	): Promise<Partial<IUser | null>> => {
-		const user: any = await userRepository.fetchOneUser(query)
+		const user = await userRepository.fetchOneUser(query)
+
+		if (!user) return null
+
 		if (fields) {
 			return this.serialize(user, fields)
 		}

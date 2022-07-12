@@ -31,6 +31,7 @@
 		"computed-property-spacing": ["warn", "never"],
 		"consistent-return": "off",
 		"default-case": "warn",
+		"function-paren-newline": "off",
 		"linebreak-style": "off",
 		"implicit-arrow-linebreak": "off",
 		"import/newline-after-import": "warn",
