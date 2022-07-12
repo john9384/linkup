@@ -2,35 +2,17 @@ import { jwtEncode } from '../../library/helpers/jwt'
 import { bcryptCompare, bcryptEncode } from '../../library/helpers/bcrypt'
 import { CustomError, ValidationError } from '../../library/helpers/error'
 import { BAD_REQUEST } from '../../library/constants/http-status'
-import { generateUsername } from '../../library/utils/username-generator'
+
 import { userService } from '../user'
 import { otpService } from '../otp'
 import { ISignup, ILogin } from './types/forms'
 import { IUser } from '../user/types/model'
 import { otpIsValid } from '../otp/utils/is-valid-otp'
-import userRepository from '../user/repositories'
+import userRepository from '../user/repositories/userRepository'
 
 class AuthService {
 	signup = async (formData: ISignup) => {
-		const password = await bcryptEncode(formData.password)
-		const { firstname, lastname, email } = formData
-		const user = await userRepository.fetchOneUser({ email })
-
-		if (user) {
-			throw new CustomError({
-				message: 'User with email exits',
-				status: BAD_REQUEST,
-			})
-		}
-
-		const username = generateUsername(firstname, lastname)
-		const newUser: IUser = await userRepository.createUser({
-			firstname,
-			lastname,
-			email,
-			password,
-			username,
-		})
+		const newUser: IUser = await userService.createUser(formData)
 
 		otpService.request({
 			userId: newUser.id,
@@ -44,7 +26,18 @@ class AuthService {
 
 	login = async (formData: ILogin) => {
 		const { email, password } = formData
-		const user = await userService.fetchOneUser({ email })
+		const user = await userService.fetchOneUser({ email }, [
+			'id',
+			'email',
+			'password',
+		])
+
+		if (!user) {
+			throw new ValidationError({
+				message: 'Invalid Credential, Check the email you inputed',
+				status: BAD_REQUEST,
+			})
+		}
 
 		const passwordValid = await bcryptCompare(password, user?.password || '')
 		if (!passwordValid) {

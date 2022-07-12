@@ -1,4 +1,4 @@
-import userRouter from './routes'
+import userRouter from './routes/userRoutes'
 import userService from './services/userService'
 import * as userController from './controllers/userControllers'
 

@@ -1,10 +1,14 @@
+import { Request, Response, NextFunction } from 'express'
 import { UNAUTHORIZED } from '../constants/http-status'
 import { jwtDecode } from '../helpers/jwt'
-import { IRequest, IResponse, INext } from '../../app/types/http'
 import { CustomError } from '../helpers/error'
 import { buildResponse } from '../utils/response-builder'
 
-const isAuthenticated = async (req: IRequest, res: IResponse, next: INext) => {
+const isAuthenticated = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	if (!req.header('Authorization')) {
 		throw new CustomError({
 			message: 'Unauthorized',

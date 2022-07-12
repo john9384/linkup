@@ -2,18 +2,14 @@ import _ from 'lodash'
 import { IUser } from '../types/model'
 import { IQueryUser, IUpdateUser } from '../types/dtos'
 import userRepository from '../repositories/userRepository'
-import { bcryptEncode } from '../../../library/helpers/bcrypt'
-import { CustomError } from '../../../library/helpers/error'
-import { generateUsername } from '../../../library/utils/username-generator'
-import { BAD_REQUEST } from '../../../library/constants/http-status'
 
-class UserService {
-	fetchUsers = async (query?: IQueryUser): Promise<IUser[] | null> => {
+class ProfileService {
+	fetchProfiles = async (query?: IQueryUser): Promise<IUser[] | null> => {
 		const users = await userRepository.fetchUsers(query)
 		return users
 	}
 
-	fetchOneUser = async (
+	fetchOneProfile = async (
 		query: IQueryUser,
 		fields?: string[],
 	): Promise<Partial<IUser | null>> => {
@@ -26,43 +22,25 @@ class UserService {
 			'id',
 			'firstname',
 			'lastname',
+			'fullname',
 			'email',
 			'username',
 			'phone',
+			'avatar',
+			'bgImgUrl',
+			'gender',
+			'religion',
+			'location',
 			'emailVerified',
 			'phoneVerified',
 		])
 	}
 
-	createUser = async (formData: any): Promise<IUser> => {
-		const { firstname, lastname, email } = formData
-		const user = await this.fetchOneUser({ email }, ['email'])
-
-		if (user) {
-			throw new CustomError({
-				message: 'User with email exits',
-				status: BAD_REQUEST,
-			})
-		}
-		const password = await bcryptEncode(formData.password)
-		const username = generateUsername(firstname, lastname)
-		const newUser = await userRepository.createUser({
-			firstname,
-			lastname,
-			email,
-			password,
-			username,
-		})
-		return newUser
-	}
-
-	updateUser = async (
+	updateProfile = async (
 		query: IQueryUser,
 		data: IUpdateUser,
 	): Promise<IUser | null> => {
 		const user = await userRepository.updateUser(query, data)
-		// Todo
-		// Hash neccessary field befor update
 		return user
 	}
 
@@ -73,8 +51,8 @@ class UserService {
 			id: user.id,
 			firstname: user.firstname,
 			lastname: user.lastname,
+			fullname: `${user.firstname} ${user.lastname}`,
 			email: user.email,
-			password: user.password,
 			username: user.username,
 			phone: user.phone,
 			avatar: user.avatar,
@@ -90,4 +68,4 @@ class UserService {
 	}
 }
 
-export default new UserService()
+export default new ProfileService()

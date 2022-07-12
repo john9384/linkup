@@ -3,15 +3,15 @@ export interface IUser {
 	firstname: string
 	lastname: string
 	email: string
-	password?: string
+	password: string
 	gender?: string
 	phone?: string
+	username?: string
+	avatar?: string
+	bgImgUrl?: string
+	religion?: string
 	location?: string
 	emailVerified?: boolean
 	phoneVerified?: boolean
-	isVendor?: boolean
-	isFreelancer?: boolean
-	isBlogger?: boolean
-	isPremium?: boolean
-	isSubscribed?: boolean
+
 }

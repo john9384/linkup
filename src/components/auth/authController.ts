@@ -1,8 +1,7 @@
-import { IRequest, IResponse } from '../../app/types/http'
+import { Request, Response } from 'express'
 import { CREATED, OK } from '../../library/constants/http-status'
 import { buildResponse } from '../../library/utils/response-builder'
 import authService from './authService'
-import { ILogin, ISignup } from './types/forms'
 import { validateFormData } from '../../library/utils/validate-form-data'
 import {
 	VSignup,
@@ -11,9 +10,10 @@ import {
 	VForgotPassword,
 	VResetPassword,
 } from './utils/validators'
+import { userService } from '../user'
 
 class AuthController {
-	signup = async (req: IRequest<ISignup>, res: IResponse) => {
+	signup = async (req: Request, res: Response) => {
 		const formData = req.body
 		validateFormData(VSignup, formData)
 
@@ -28,7 +28,7 @@ class AuthController {
 		)
 	}
 
-	login = async (req: IRequest<ILogin>, res: IResponse) => {
+	login = async (req: Request, res: Response) => {
 		const formData = req.body
 		validateFormData(VLogin, formData)
 
@@ -43,7 +43,7 @@ class AuthController {
 		)
 	}
 
-	verifyEmail = async (req: IRequest, res: IResponse) => {
+	verifyEmail = async (req: Request, res: Response) => {
 		const formData = req.body
 		validateFormData(VToken, formData)
 
@@ -58,7 +58,7 @@ class AuthController {
 		)
 	}
 
-	forgotPassword = async (req: IRequest, res: IResponse) => {
+	forgotPassword = async (req: Request, res: Response) => {
 		const formData = req.body
 		validateFormData(VForgotPassword, formData)
 
@@ -73,7 +73,7 @@ class AuthController {
 		)
 	}
 
-	verifyToken = async (req: IRequest, res: IResponse) => {
+	verifyToken = async (req: Request, res: Response) => {
 		const formData = req.body
 		validateFormData(VToken, formData)
 
@@ -88,7 +88,7 @@ class AuthController {
 		)
 	}
 
-	resetPassword = async (req: IRequest, res: IResponse) => {
+	resetPassword = async (req: Request, res: Response) => {
 		const formData = req.body
 		validateFormData(VResetPassword, formData)
 
@@ -98,6 +98,21 @@ class AuthController {
 			buildResponse({
 				success: true,
 				message: 'Password Reset successful',
+				data: responseData,
+			}),
+		)
+	}
+
+	getUser = async (req: Request, res: Response) => {
+		const userId = req.user?.id
+
+		const user = await userService.fetchOneUser({ id: userId })
+		const responseData = user
+
+		return res.status(OK).send(
+			buildResponse({
+				success: true,
+				message: 'Ok',
 				data: responseData,
 			}),
 		)

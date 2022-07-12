@@ -19,7 +19,7 @@
 		"scope": "typescript, javascript",
 		"prefix": "ctr",
 		"body": [
-			"export const $controllerName = async (req: IRequest, res: IResponse) => {",
+			"export const $controllerName = async (req: Request, res: IResponse) => {",
 			"\tconst responseData = {}",
 			"\treturn res.status(200).send(",
 			"\t\tbuildResponse({",

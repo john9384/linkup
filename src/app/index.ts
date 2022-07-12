@@ -1,10 +1,9 @@
-import express from 'express'
+import express, {Request, Response, NextFunction} from 'express'
 import path from 'path'
 import cors from 'cors'
 import morganMiddleware from '../library/middlewares/morgan'
 import Logger from '../library/helpers/loggers'
 import { IError } from '../library/helpers/error'
-import { IRequest, IResponse, INext } from './types/http'
 import routes from './routes'
 
 const app = express()
@@ -27,7 +26,7 @@ app.use('/', routes)
 
 app.get('*', (_, res) => res.send('Invalid route'))
 
-app.use((error: IError, req: IRequest<null>, res: IResponse, next: INext) => {
+app.use((error: IError, req: Request, res: Response, next: NextFunction) => {
 	Logger.error(error.stack)
 
 	return res.status(error.status || 500).send({

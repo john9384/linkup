@@ -1,11 +1,10 @@
-import { IRequest, IResponse } from '../../app/types/http'
+import { Request, Response } from 'express'
 import { OK } from '../../library/constants/http-status'
 import { buildResponse } from '../../library/utils/response-builder'
 import otpService from './otpService'
-import { ICreateOtp, IValidateOtp } from './types/formTypes'
 
 class OtpController {
-	requestOtp = async (req: IRequest<ICreateOtp>, res: IResponse) => {
+	requestOtp = async (req: Request, res: Response) => {
 		const formData = req.body
 		const responseData = await otpService.request(formData)
 
@@ -18,7 +17,7 @@ class OtpController {
 		)
 	}
 
-	validateOtp = async (req: IRequest<IValidateOtp>, res: IResponse) => {
+	validateOtp = async (req: Request, res: Response) => {
 		const formData = req.body
 		const otpValid = await otpService.validate(formData.token)
 		const responseData = {

@@ -5,7 +5,7 @@ import postService from '../services/postService'
 import { IUpdatePost } from '../types/formTypes'
 
 class PostController {
-	getPosts = async (req: IRequest, res: IResponse) => {
+	getPosts = async (req: Request, res: IResponse) => {
 		const users = await postService.fetchPosts()
 		// TODO
 		// Make room for fetching with query parameters
@@ -21,7 +21,7 @@ class PostController {
 		)
 	}
 
-	getPostById = async (req: IRequest, res: IResponse) => {
+	getPostById = async (req: Request, res: IResponse) => {
 		const userId = req.params.id
 		const user = await postService.fetchOnePost({ id: userId })
 		const responseData = user
