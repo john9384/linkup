@@ -1,5 +1,4 @@
-export const otpMail = (otp: string | number) => {
-  return `
+export const otpMail = (otp: string | number) => (`
   <html lang='en'>
   <head>
     <meta charset='UTF-8' />
@@ -26,5 +25,4 @@ export const otpMail = (otp: string | number) => {
 
   </body>
 </html>
-  `;
-};
+  `)

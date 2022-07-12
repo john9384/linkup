@@ -1,12 +1,10 @@
-import { Request, Response, NextFunction } from 'express'
-import { IRequest, IResponse } from '../../../app/types/http'
+import { Request, Response } from 'express'
 import { buildResponse } from '../../../library/utils/response-builder'
 import { OK } from '../../../library/constants/http-status'
 import userService from '../services/userService'
-import { IUpdateUser } from '../types/dtos'
 
 class UserController {
-	getUsers = async (req: Request, res: IResponse) => {
+	getUsers = async (req: Request, res: Response) => {
 		const users = await userService.fetchUsers()
 		// TODO
 		// Make room for fetching with query parameters
@@ -22,7 +20,7 @@ class UserController {
 		)
 	}
 
-	getUserById = async (req: Request, res: IResponse) => {
+	getUserById = async (req: Request, res: Response) => {
 		const userId = req.params.id
 		const user = await userService.fetchOneUser({ id: userId })
 		const responseData = user
@@ -36,7 +34,7 @@ class UserController {
 		)
 	}
 
-	updateUser = async (req: Request, res: IResponse) => {
+	updateUser = async (req: Request, res: Response) => {
 		const userId = req.params.id
 		const formData = req.body
 		const updatedUser = await userService.updateUser({ id: userId }, formData)

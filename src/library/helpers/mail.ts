@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import nodemailer, { SendMailOptions } from 'nodemailer'
 import smtpTransport from 'nodemailer-smtp-transport'
-import { otpMail } from '../../app/views/emails/otp'
+import { otpMail } from '../../views/emails/otp'
 
 export interface IMailObject extends SendMailOptions {
 	mailContent: string

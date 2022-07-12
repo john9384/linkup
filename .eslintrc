@@ -114,7 +114,7 @@
 	},
 	"overrides": [
 		{
-			"files": ["src/scripts/*.ts", "src/db/migrations/*.ts"],
+			"files": ["src/scripts/*.ts", "src/views/*.ts"],
 			"rules": {
 				"no-console": "off",
 				"quotes": "off",
