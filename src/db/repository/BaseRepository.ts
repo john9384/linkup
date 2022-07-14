@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ObjectId } from 'mongodb'
+
 class BaseRepository {
 	Model: any
 

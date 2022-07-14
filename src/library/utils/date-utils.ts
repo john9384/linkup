@@ -9,10 +9,10 @@ export const tokenExpired = (tokenExpires?: string) => {
 	return false
 }
 
-export const minsToMilli = (mins: any) => mins * 60000
+export const minsToMilliSec = (mins: any) => mins * 60000
 
-export const milliToDays = (milli: any) => {
-	const oneDay = 24 * 60 * 60 * 60 * 1000
+export const milliSecToDays = (milli: any) => {
+	const oneDay = 24 * 60 * 60 * 1000
 	return milli / oneDay
 }
 

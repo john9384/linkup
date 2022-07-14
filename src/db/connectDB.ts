@@ -3,7 +3,7 @@ import config from './config'
 import Logger from '../library/helpers/loggers'
 import { IError } from '../library/helpers/error'
 
-const ConnectDatabase = () => {
+const ConnectDatabase = async () => {
 	mongoose
 		.connect(String(config.MONGO_URI), {})
 		.then(() => {

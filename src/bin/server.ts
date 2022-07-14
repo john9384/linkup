@@ -4,7 +4,7 @@ import os from 'os'
 import config from '../config'
 import Logger from '../library/helpers/loggers'
 import app from '../app'
-import ConnectDatabase from '../db'
+import ConnectDatabase from '../db/connectDB'
 
 const PORT = config.APP_PORT || 4000
 

@@ -60,6 +60,14 @@ const userSchema = new Schema(
 			type: Boolean,
 			default: false,
 		},
+		friends: [
+			{
+				user: {
+					type: Schema.Types.ObjectId,
+					ref: 'users',
+				},
+			},
+		],
 	},
 	{
 		timestamps: true,
