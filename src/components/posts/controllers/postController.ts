@@ -1,11 +1,10 @@
-import { IRequest, IResponse } from '../../../app/types/http'
+import { Request, Response } from 'express'
 import { buildResponse } from '../../../library/utils/response-builder'
 import { OK } from '../../../library/constants/http-status'
 import postService from '../services/postService'
-import { IUpdatePost } from '../types/formTypes'
 
 class PostController {
-	getPosts = async (req: Request, res: IResponse) => {
+	getPosts = async (req: Request, res: Response) => {
 		const users = await postService.fetchPosts()
 		// TODO
 		// Make room for fetching with query parameters
@@ -21,7 +20,7 @@ class PostController {
 		)
 	}
 
-	getPostById = async (req: Request, res: IResponse) => {
+	getPostById = async (req: Request, res: Response) => {
 		const userId = req.params.id
 		const user = await postService.fetchOnePost({ id: userId })
 		const responseData = user
@@ -35,7 +34,7 @@ class PostController {
 		)
 	}
 
-	updatePost = async (req: IRequest<IUpdatePost>, res: IResponse) => {
+	updatePost = async (req: Request, res: Response) => {
 		const userId = req.params.id
 		const formData = req.body
 		const updatedPost = await postService.updatePost({ id: userId }, formData)

@@ -7,6 +7,10 @@ const postSchema = new Schema(
 			type: String,
 			trim: true,
 		},
+		content: {
+			type: String,
+			trim: true,
+		},
 		comments: [
 			{
 				commentId: {
@@ -25,7 +29,7 @@ const postSchema = new Schema(
 		toJSON: {
 			virtuals: true,
 		},
-		collection: 'post',
+		collection: 'posts',
 	},
 )
 
