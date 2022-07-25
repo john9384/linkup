@@ -1,11 +1,24 @@
-import { CustomError } from '../../../library/helpers/error'
-import { BAD_REQUEST } from '../../../library/constants/http-status'
 import { IPost } from '../types/modelTypes'
 import { ICreatePost, IQueryPost, IUpdatePost } from '../types/formTypes'
 import postRepository from '../repositories/postRepository'
+import profileService from '../../user/services/profileService'
+import { PaginationOptions } from '../../../db/repository/types'
 
 class PostService {
-	fetchPosts = async (query?: IQueryPost): Promise<IPost[] | null> => {
+	fetchPosts = async (
+		query?: IQueryPost,
+		pagination?: PaginationOptions,
+	): Promise<IPost[] | null> => {
+		if (pagination) {
+			const { page, limit } = pagination
+			const posts = await postRepository.fetchAndPaginate<IQueryPost, IPost[]>(
+				query,
+				{ page, limit },
+			)
+
+			return posts
+		}
+
 		const posts = await postRepository.fetchPosts(query)
 		return posts
 	}
@@ -17,15 +30,14 @@ class PostService {
 	}
 
 	createPost = async (data: ICreatePost): Promise<IPost> => {
-		const post = await postRepository.fetchOnePost({ email: data.email })
-
-		if (post) {
-			throw new CustomError({
-				message: 'Post with email exits',
-				status: BAD_REQUEST,
-			})
-		}
-		const newPost = await postRepository.createPost(data)
+		const userPayload = await profileService.fetchOneProfile(
+			{ id: data.userId },
+			['fullname', 'username', 'avatar'],
+		)
+		const newPost = await postRepository.createPost({
+			user: userPayload,
+			...data,
+		})
 
 		return newPost
 	}
@@ -36,6 +48,14 @@ class PostService {
 	): Promise<IPost | null> => {
 		const post = await postRepository.updatePost(query, data)
 		return post
+	}
+
+	deletePost = async (id: string) => {
+		await postRepository.deletePost(id)
+
+		return {
+			message: 'post deleted',
+		}
 	}
 }
 

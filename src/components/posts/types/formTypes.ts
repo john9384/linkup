@@ -1,11 +1,11 @@
 export interface ICreatePost {
-	[key: string]: string | number | boolean
+	[key: string]: any
 }
 
 export interface IUpdatePost {
-	[key: string]: string | number | boolean
+	[key: string]: any
 }
 
 export interface IQueryPost {
-	[key: string]: string | number | boolean
+	[key: string]: any
 }

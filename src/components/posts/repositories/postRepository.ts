@@ -1,16 +1,26 @@
 import BaseRepository from '../../../db/repository/BaseRepository'
+import { PaginationOptions } from '../../../db/repository/types'
 import { Post } from '../models/Post'
 import { ICreatePost, IUpdatePost, IQueryPost } from '../types/formTypes'
 import { IPost } from '../types/modelTypes'
 
 class PostRepository extends BaseRepository {
-	fetchPosts = async (query?: IQueryPost): Promise<IPost[] | null> => {
-		const users = await this.fetch<IQueryPost, IPost[]>(query)
-		return users
+	fetchPosts = async (
+		query?: IQueryPost,
+		pageOptions?: PaginationOptions,
+	): Promise<IPost[] | null> => {
+		const limit = pageOptions ? pageOptions.limit : 10
+		const page = pageOptions ? pageOptions.page * pageOptions.limit : 0
+		const posts = await this.fetchAndPaginate<IQueryPost, IPost[]>(query, {
+			page,
+			limit,
+		})
+
+		return posts
 	}
 	fetchOnePost = async (query: IQueryPost): Promise<IPost | null> => {
-		const user = await this.fetchOne<IQueryPost, IPost>(query)
-		return user
+		const post = await this.fetchOne<IQueryPost, IPost>(query)
+		return post
 	}
 
 	createPost = async (data: ICreatePost): Promise<IPost> => {
@@ -29,8 +39,12 @@ class PostRepository extends BaseRepository {
 
 		return updatedPost
 	}
+
+	deletePost = async (id: string) => {
+		await this.destroy<IQueryPost>({ id })
+	}
 }
 
-const userRepository = new PostRepository(Post)
+const postRepository = new PostRepository(Post)
 
-export default userRepository
+export default postRepository

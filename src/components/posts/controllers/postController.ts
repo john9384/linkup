@@ -5,11 +5,14 @@ import postService from '../services/postService'
 
 class PostController {
 	getPosts = async (req: Request, res: Response) => {
-		const users = await postService.fetchPosts()
-		// TODO
-		// Make room for fetching with query parameters
-		// Make room for pagination
-		const responseData = users
+		const { page, limit } = req.query
+
+		const posts = await postService.fetchPosts(
+			{},
+			{ page: Number(page), limit: Number(limit) },
+		)
+
+		const responseData = posts
 
 		return res.status(OK).send(
 			buildResponse({
@@ -21,9 +24,9 @@ class PostController {
 	}
 
 	getPostById = async (req: Request, res: Response) => {
-		const userId = req.params.id
-		const user = await postService.fetchOnePost({ id: userId })
-		const responseData = user
+		const postId = req.params.id
+		const post = await postService.fetchOnePost({ id: postId })
+		const responseData = post
 
 		return res.status(OK).send(
 			buildResponse({
@@ -34,11 +37,44 @@ class PostController {
 		)
 	}
 
+	createPost = async (req: Request, res: Response) => {
+		// Validate post
+		const userId = req.user.id
+		const { content } = req.body
+		const post = await postService.createPost({
+			userId,
+			content,
+			images: [],
+		})
+		const responseData = post
+
+		return res.status(OK).send(
+			buildResponse({
+				success: true,
+				message: 'Post created',
+				data: responseData,
+			}),
+		)
+	}
+
 	updatePost = async (req: Request, res: Response) => {
-		const userId = req.params.id
+		const postId = req.params.id
 		const formData = req.body
-		const updatedPost = await postService.updatePost({ id: userId }, formData)
+		const updatedPost = await postService.updatePost({ id: postId }, formData)
 		const responseData = updatedPost
+
+		return res.status(OK).send(
+			buildResponse({
+				success: true,
+				message: 'Ok',
+				data: responseData,
+			}),
+		)
+	}
+
+	deletePost = async (req: Request, res: Response) => {
+		const postId = req.params.id
+		const responseData = await postService.deletePost(postId)
 
 		return res.status(OK).send(
 			buildResponse({

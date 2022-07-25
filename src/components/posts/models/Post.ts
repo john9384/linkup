@@ -4,13 +4,30 @@ import { Schema, model } from 'mongoose'
 const postSchema = new Schema(
 	{
 		userId: {
-			type: String,
-			trim: true,
+			type: Schema.Types.ObjectId,
+			ref: 'users',
+		},
+		user: {
+			fullname: {
+				type: String,
+			},
+			username: {
+				type: String,
+			},
+			avatar: {
+				type: String,
+			},
 		},
 		content: {
 			type: String,
 			trim: true,
 		},
+		images: [
+			{
+				type: String,
+				trim: true,
+			},
+		],
 		comments: [
 			{
 				commentId: {

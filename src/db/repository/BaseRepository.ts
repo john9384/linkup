@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ObjectId } from 'mongodb'
+import { PaginationOptions } from './types'
 
 class BaseRepository {
 	Model: any
@@ -13,6 +14,18 @@ class BaseRepository {
 	async fetch<TQuery, TReturn>(query?: TQuery, fields?: any): Promise<TReturn> {
 		const queryObj = this.setQueryObj(query)
 		const models = await this.Model.find(queryObj).select(fields)
+		return models
+	}
+
+	async fetchAndPaginate<TQuery, TReturn>(
+		query?: TQuery,
+		pagination?: PaginationOptions,
+	): Promise<TReturn> {
+		const queryObj = this.setQueryObj(query)
+		const models = await this.Model.find(queryObj)
+			.skip(pagination?.page)
+			.limit(pagination?.limit)
+
 		return models
 	}
 

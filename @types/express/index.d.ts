@@ -6,6 +6,6 @@ declare module 'express-serve-static-core' {
 		email?: string
 	}
 	export interface Request {
-		user?: User
+		user: User
 	}
 }
