@@ -28,6 +28,12 @@ const postSchema = new Schema(
 				trim: true,
 			},
 		],
+		likes: [
+			{
+				type: String,
+				trim: true,
+			},
+		],
 		comments: [
 			{
 				commentId: {

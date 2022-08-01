@@ -2,7 +2,7 @@ import { Express } from 'express'
 
 declare module 'express-serve-static-core' {
 	interface User {
-		id?: string
+		id: string
 		email?: string
 	}
 	export interface Request {

@@ -9,8 +9,10 @@ class PostRepository extends BaseRepository {
 		query?: IQueryPost,
 		pageOptions?: PaginationOptions,
 	): Promise<IPost[] | null> => {
-		const limit = pageOptions ? pageOptions.limit : 10
-		const page = pageOptions ? pageOptions.page * pageOptions.limit : 0
+		const limit = pageOptions?.limit ? Number(pageOptions?.limit) : 10
+		const page = pageOptions?.page
+			? Number(pageOptions?.page) * Number(pageOptions?.limit)
+			: 0
 		const posts = await this.fetchAndPaginate<IQueryPost, IPost[]>(query, {
 			page,
 			limit,

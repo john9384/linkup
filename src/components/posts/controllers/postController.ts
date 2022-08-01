@@ -72,6 +72,21 @@ class PostController {
 		)
 	}
 
+	toggleLikePost = async (req: Request, res: Response) => {
+		const postId = req.params.id
+		const userId = req.user.id
+		const post = await postService.toggleLikePost(postId, userId)
+		const responseData = post
+
+		return res.status(OK).send(
+			buildResponse({
+				success: true,
+				message: 'Ok',
+				data: responseData,
+			}),
+		)
+	}
+
 	deletePost = async (req: Request, res: Response) => {
 		const postId = req.params.id
 		const responseData = await postService.deletePost(postId)

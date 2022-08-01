@@ -23,6 +23,7 @@ class BaseRepository {
 	): Promise<TReturn> {
 		const queryObj = this.setQueryObj(query)
 		const models = await this.Model.find(queryObj)
+			.sort({ createdAt: -1 })
 			.skip(pagination?.page)
 			.limit(pagination?.limit)
 

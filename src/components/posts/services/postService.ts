@@ -11,10 +11,7 @@ class PostService {
 	): Promise<IPost[] | null> => {
 		if (pagination) {
 			const { page, limit } = pagination
-			const posts = await postRepository.fetchAndPaginate<IQueryPost, IPost[]>(
-				query,
-				{ page, limit },
-			)
+			const posts = await postRepository.fetchPosts(query, { page, limit })
 
 			return posts
 		}
@@ -48,6 +45,28 @@ class PostService {
 	): Promise<IPost | null> => {
 		const post = await postRepository.updatePost(query, data)
 		return post
+	}
+
+	toggleLikePost = async (postId: string, userId: string) => {
+		let post = await postRepository.fetchOnePost({ id: postId })
+		if (!post) throw new Error('Post not found')
+
+		if (post.likes.includes(userId)) {
+			post.likes = post.likes.filter((id: string) => id !== userId)
+			const updatedPost = await postRepository.updatePost(
+				{ id: postId },
+				{ likes: post.likes },
+			)
+			return updatedPost
+		}
+
+		post.likes.push(userId)
+		const updatedPost = await postRepository.updatePost(
+			{ id: postId },
+			{ likes: post.likes },
+		)
+
+		return updatedPost
 	}
 
 	deletePost = async (id: string) => {
