@@ -9,8 +9,13 @@ postRouter.get('/', isAuthenticated, catchErrors(postController.getPosts))
 postRouter.get('/:id', isAuthenticated, catchErrors(postController.getPostById))
 postRouter.post('/', isAuthenticated, catchErrors(postController.createPost))
 postRouter.put('/:id', isAuthenticated, catchErrors(postController.updatePost))
-postRouter.put(
+postRouter.post(
 	'/like/:id',
+	isAuthenticated,
+	catchErrors(postController.toggleLikePost),
+)
+postRouter.post(
+	'/unlike/:id',
 	isAuthenticated,
 	catchErrors(postController.toggleLikePost),
 )

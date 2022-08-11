@@ -10,6 +10,13 @@ profileRouter.get(
 	isAuthenticated,
 	catchErrors(profileController.getProfiles),
 )
+
+profileRouter.get(
+	'/user/current',
+	isAuthenticated,
+	catchErrors(profileController.getCurrentUserProfile),
+)
+
 profileRouter.get(
 	'/:id',
 	isAuthenticated,

@@ -20,6 +20,20 @@ class UserController {
 		)
 	}
 
+	getCurrentUserProfile = async (req: Request, res: Response) => {
+		const userId = req.user.id
+		const user = await userService.fetchOneUser({ id: userId })
+		const responseData = user
+
+		return res.status(OK).send(
+			buildResponse({
+				success: true,
+				message: 'Ok',
+				data: responseData,
+			}),
+		)
+	}
+
 	getProfileById = async (req: Request, res: Response) => {
 		const userId = req.params.id
 		const user = await userService.fetchOneUser({ id: userId })
