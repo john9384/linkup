@@ -6,7 +6,6 @@
 	"author": "John Damilola Ogungbure <jogungbure@gmail.com>",
 	"license": "MIT",
 	"scripts": {
-		"prestart": "yarn build",
 		"start": "node build/bin/server.js",
 		"predev": "yarn lint",
 		"dev": "nodemon",
