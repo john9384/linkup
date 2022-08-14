@@ -6,7 +6,8 @@
 	"author": "John Damilola Ogungbure <jogungbure@gmail.com>",
 	"license": "MIT",
 	"scripts": {
-		"start": "ts-node dist/bin/server.js",
+		"prestart": "npm run build",
+		"start": "node dist/bin/server.js",
 		"predev": "yarn lint",
 		"dev": "nodemon",
 		"test": "ENV_FILE=./.env.test jest --detectOpenHandles",
@@ -15,9 +16,7 @@
 		"lint:fix": "eslint src/**/*.ts --fix",
 		"generate": "ts-node src/scripts/generators.ts",
 		"list-routes": "ts-node src/scripts/route-list.ts",
-		"ci": "yarn lint && yarn build",
-		"postinstall": "tsc",
-		"deploy": "git add . && git commit -m Heroku && git push heroku master"
+		"ci": "yarn lint && yarn build"
 	},
 	"engines": {
 		"node": "^16.x"
