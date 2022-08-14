@@ -30,7 +30,7 @@ async function seedUsers() {
 
 	Logger.info('Seeding Users ....')
 
-	await User.deleteMany({})
+	// await User.deleteMany({})
 	const newUsers = await User.insertMany(userData)
 	const newUsersId = newUsers.map(user => user.id)
 	await updateFriends(newUsersId)

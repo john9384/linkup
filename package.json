@@ -15,7 +15,12 @@
 		"lint:fix": "eslint src/**/*.ts --fix",
 		"generate": "ts-node src/scripts/generators.ts",
 		"list-routes": "ts-node src/scripts/route-list.ts",
-		"ci": "yarn lint && yarn build"
+		"ci": "yarn lint && yarn build",
+		"postinstall": "tsc",
+		"deploy": "git add . && git commit -m Heroku && git push heroku master"
+	},
+	"engines": {
+		"node": "^16.x"
 	},
 	"husky": {
 		"hooks": {
