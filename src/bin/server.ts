@@ -6,7 +6,7 @@ import Logger from '../library/helpers/loggers'
 import app from '../app'
 import ConnectDatabase from '../db/connectDB'
 
-const PORT = config.APP_PORT || 4000
+const PORT = process.env.APP_PORT || 4000
 
 if (cluster.isPrimary) {
 	const cpuCoreCount = os.cpus().length
@@ -20,7 +20,7 @@ if (cluster.isPrimary) {
 		cluster.fork()
 	})
 } else {
-	ConnectDatabase()
+	ConnectDatabase().then(() => {}).catch(err => Logger.error(err))
 
 	new http.Server(app).listen(PORT, () => {
 		Logger.info(`
