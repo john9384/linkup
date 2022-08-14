@@ -7,7 +7,7 @@
 	"license": "MIT",
 	"scripts": {
 		"prestart": "npm run build",
-		"start": "node dist/bin/server.js",
+		"start": "node build/bin/server.js",
 		"predev": "yarn lint",
 		"dev": "nodemon",
 		"test": "ENV_FILE=./.env.test jest --detectOpenHandles",
