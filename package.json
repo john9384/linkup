@@ -6,7 +6,7 @@
 	"author": "John Damilola Ogungbure <jogungbure@gmail.com>",
 	"license": "MIT",
 	"scripts": {
-		"prestart": "npm run build",
+		"prestart": "yarn build",
 		"start": "node build/bin/server.js",
 		"predev": "yarn lint",
 		"dev": "nodemon",
@@ -16,7 +16,7 @@
 		"lint:fix": "eslint src/**/*.ts --fix",
 		"generate": "ts-node src/scripts/generators.ts",
 		"list-routes": "ts-node src/scripts/route-list.ts",
-		"ci": "yarn lint && yarn build"
+		"ci": "yarn lint && yarn test"
 	},
 	"engines": {
 		"node": "^16.x"
