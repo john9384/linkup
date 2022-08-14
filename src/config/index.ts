@@ -3,13 +3,13 @@ import dotenv from 'dotenv'
 import fs from 'fs'
 import Logger from '../library/helpers/loggers'
 
-if (process.env.ENVIRONMENT === 'development' && !fs.existsSync('.env')) {
+if (process.env.NODE_ENV === 'development' && !fs.existsSync('.env')) {
 	Logger.error('.env file not found')
+} else {
+	dotenv.config({
+		path: path.join(__dirname, '../../.env'),
+	})
 }
-
-dotenv.config({
-	path: path.join(__dirname, '../../.env'),
-})
 
 const config = {
 	API_PREFIX: process.env.API_PREFIX,
