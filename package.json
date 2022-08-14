@@ -19,7 +19,8 @@
 		"ci": "yarn lint && yarn test"
 	},
 	"engines": {
-		"node": "^16.x"
+		"node": "16.x",
+		"npm": "8.3.1"
 	},
 	"husky": {
 		"hooks": {
