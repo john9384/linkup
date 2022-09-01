@@ -1,16 +1,21 @@
-import { jwtEncode } from '../../library/helpers/jwt'
-import { bcryptCompare, bcryptEncode } from '../../library/helpers/bcrypt'
-import { CustomError, ValidationError } from '../../library/helpers/error'
-import { BAD_REQUEST } from '../../library/constants/http-status'
+import { BAD_REQUEST } from '../../../library/constants/http-status'
+import { bcryptCompare, bcryptEncode } from '../../../library/helpers/bcrypt'
+import { ValidationError, CustomError } from '../../../library/helpers/error'
+import { jwtEncode } from '../../../library/helpers/jwt'
+import userRepository from '../../user/repositories/userRepository'
+import { otpService } from '../../otp'
+import { otpIsValid } from '../../otp/utils/is-valid-otp'
+import { userService } from '../../user'
+import { IUser } from '../../user/types/model'
+import { ISignup, ILogin } from '../types/forms'
+import { IAuthService } from '../../../types/auth'
+import {
+	IAuthToken,
+	IForgotPassword,
+	IResetPassword,
+} from '../../../types/auth/IAuthDTO'
 
-import { userService } from '../user'
-import { otpService } from '../otp'
-import { ISignup, ILogin } from './types/forms'
-import { IUser } from '../user/types/model'
-import { otpIsValid } from '../otp/utils/is-valid-otp'
-import userRepository from '../user/repositories/userRepository'
-
-class AuthService {
+class AuthService implements IAuthService {
 	signup = async (formData: ISignup) => {
 		const newUser: IUser = await userService.createUser(formData)
 
@@ -24,7 +29,9 @@ class AuthService {
 		return { email: newUser.email }
 	}
 
-	login = async (formData: ILogin) => {
+	public async login(
+		formData: ILogin,
+	): Promise<{ email: string | undefined; token: string }> {
 		const { email, password } = formData
 		const user = await userService.fetchOneUser({ email }, [
 			'id',
@@ -50,12 +57,12 @@ class AuthService {
 		const encodedData = jwtEncode({ userId: user?.id, email: user?.email })
 
 		return {
-			email: user?.email,
+			email: user.email,
 			token: encodedData,
 		}
 	}
 
-	verifyEmail = async (formData: any) => {
+	public async verifyEmail(formData: IAuthToken): Promise<Partial<IUser>> {
 		const otp = await otpIsValid(formData.token)
 
 		await userRepository.updateUser(
@@ -68,8 +75,10 @@ class AuthService {
 		}
 	}
 
-	forgotPassword = async (formData: any) => {
-		const userExist: any = await userRepository.fetchOneUser({
+	public async forgotPassword(
+		formData: IForgotPassword,
+	): Promise<{ email: string; message: string }> {
+		const userExist = await userRepository.fetchOneUser({
 			email: formData.email,
 		})
 
@@ -93,7 +102,7 @@ class AuthService {
 		}
 	}
 
-	verifyToken = async (formData: any) => {
+	public async verifyToken(formData: IAuthToken): Promise<Partial<IUser>> {
 		const otp = await otpIsValid(formData.token)
 
 		return {
@@ -101,7 +110,9 @@ class AuthService {
 		}
 	}
 
-	resetPassword = async (formData: any) => {
+	public async resetPassword(
+		formData: IResetPassword,
+	): Promise<{ message: string }> {
 		const userExist = await userRepository.fetchOneUser({
 			email: formData.email,
 		})
@@ -124,4 +135,4 @@ class AuthService {
 	}
 }
 
-export default new AuthService()
+export const authService = new AuthService()

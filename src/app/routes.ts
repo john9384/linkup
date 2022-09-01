@@ -1,5 +1,5 @@
 import express from 'express'
-import authRouter from '../components/auth/authRoutes'
+import { authRouter } from '../components/auth/routes'
 import userRouter from '../components/user/routes/userRoutes'
 import profileRouter from '../components/user/routes/profileRoutes'
 import postRouter from '../components/posts/routes/postRoutes'

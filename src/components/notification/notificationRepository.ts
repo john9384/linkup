@@ -8,6 +8,9 @@ import {
 import { INotification } from './types/modelTypes'
 
 class NotificationRepository extends BaseRepository {
+	fetchOneUser(arg0: { email: any }): any {
+		throw new Error('Method not implemented.')
+	}
 	fetchNotifications = async (
 		query?: IQueryNotification,
 	): Promise<INotification[] | null> => {

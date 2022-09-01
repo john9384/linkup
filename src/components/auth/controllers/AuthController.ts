@@ -1,18 +1,19 @@
 import { Request, Response } from 'express'
-import { CREATED, OK } from '../../library/constants/http-status'
-import { buildResponse } from '../../library/utils/response-builder'
-import authService from './authService'
-import { validateFormData } from '../../library/utils/validate-form-data'
+import { authService } from '../services'
+import { CREATED, OK } from '../../../library/constants/http-status'
+import { buildResponse } from '../../../library/utils/response-builder'
+import { validateFormData } from '../../../library/utils/validate-form-data'
+import { IAuthController } from '../../../types/auth'
+import { userService } from '../../user'
 import {
 	VSignup,
 	VLogin,
 	VToken,
 	VForgotPassword,
 	VResetPassword,
-} from './utils/validators'
-import { userService } from '../user'
+} from '../utils/validators'
 
-class AuthController {
+class AuthController implements IAuthController {
 	signup = async (req: Request, res: Response) => {
 		const formData = req.body
 		validateFormData(VSignup, formData)
@@ -119,4 +120,4 @@ class AuthController {
 	}
 }
 
-export default new AuthController()
+export const authController = new AuthController()

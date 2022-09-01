@@ -20,7 +20,9 @@ if (cluster.isPrimary) {
 		cluster.fork()
 	})
 } else {
-	ConnectDatabase().then(() => {}).catch(err => Logger.error(err))
+	ConnectDatabase()
+		.then(() => {})
+		.catch(err => Logger.error(err))
 
 	new http.Server(app).listen(PORT, () => {
 		Logger.info(`
