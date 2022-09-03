@@ -1,7 +1,6 @@
 import mongoose from 'mongoose'
 import config from './config'
-import Logger from '../library/helpers/loggers'
-import { IError } from '../library/helpers/error'
+import Logger from '../library/helpers/logger'
 
 const ConnectDatabase = async () => {
 	mongoose
@@ -9,7 +8,7 @@ const ConnectDatabase = async () => {
 		.then(() => {
 			Logger.info('------- Database Connected -------')
 		})
-		.catch((error: IError) => {
+		.catch((error: unknown) => {
 			Logger.error('------ Database Connection Failed -------')
 			Logger.error(error)
 		})

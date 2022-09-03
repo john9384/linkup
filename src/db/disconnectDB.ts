@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import Logger from '../library/helpers/loggers'
+import Logger from '../library/helpers/logger'
 
 const disconnectDB = async () => {
 	await mongoose.connection.close()

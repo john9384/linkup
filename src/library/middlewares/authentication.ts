@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { UNAUTHORIZED } from '../constants/http-status'
 import { jwtDecode } from '../helpers/jwt'
-import { CustomError } from '../helpers/error'
 import { buildResponse } from '../utils/response-builder'
 
 const isAuthenticated = async (
@@ -10,10 +9,11 @@ const isAuthenticated = async (
 	next: NextFunction,
 ) => {
 	if (!req.header('Authorization')) {
-		throw new CustomError({
-			message: 'Unauthorized',
-			status: UNAUTHORIZED,
-		})
+		throw new Error('Unauthorized')
+		// throw new Error({
+		// 	message: 'Unauthorized',
+		// 	status: UNAUTHORIZED,
+		// })
 	}
 
 	const token: string = req?.header('Authorization')?.split(' ')[1] || ''
@@ -37,4 +37,4 @@ const isAuthenticated = async (
 	}
 }
 
-export default isAuthenticated
+export { isAuthenticated as isAuthenticated }

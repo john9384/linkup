@@ -13,5 +13,4 @@ export interface IUser {
 	location?: string
 	emailVerified?: boolean
 	phoneVerified?: boolean
-
 }

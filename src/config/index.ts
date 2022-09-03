@@ -1,33 +1,52 @@
-import path from 'path'
 import dotenv from 'dotenv'
-import fs from 'fs'
-import Logger from '../library/helpers/loggers'
 
-if (process.env.NODE_ENV === 'development' && !fs.existsSync('.env')) {
-	Logger.error('.env file not found')
-} else {
-	dotenv.config({
-		path: path.join(__dirname, '../../.env'),
-	})
+const envFound = dotenv.config({ path: '.env' })
+
+if (!envFound) {
+	throw new Error("⚠️  Couldn't find .env file  ⚠️")
 }
 
 const config = {
-	API_PREFIX: process.env.API_PREFIX,
-	APP_NAME: process.env.APP_NAME,
-	APP_PORT: process.env.APP_PORT,
-	ENVIRONMENT: process.env.NODE_ENV,
-	CRYPTO_ENCRYPTION_METHOD: process.env.CRYPTO_ENCRYPTION_METHOD,
-	CRYPTO_SECRET_IV: process.env.CRYPTO_SECRET_IV,
-	CRYPTO_SECRET_KEY: process.env.CRYPTO_SECRET_KEY,
-	MONGO_URI: process.env.MONGO_URI,
-	DB_TYPE: process.env.DB_TYPE,
-	DB_HOST: process.env.DB_HOST,
-	DB_PORT: process.env.DB_PORT,
-	DB_NAME: process.env.DB_NAME,
-	DB_USERNAME: process.env.DB_USERNAME,
-	DB_PASSWORD: process.env.DB_PASSWORD,
-	JWT_SECRET: process.env.JWT_SECRET,
-	JWT_TOKEN_TYPE: process.env.JWT_TOKEN_TYPE,
+	api: {
+		BASE: process.env.API_BASE,
+		PREFIX: process.env.API_PREFIX,
+	},
+	app: {
+		NAME: process.env.APP_NAME,
+		PORT: Number(process.env.APP_PORT),
+		ENV: process.env.NODE_ENV,
+		CRYPTO_ENCRYPTION_METHOD: process.env.CRYPTO_ENCRYPTION_METHOD,
+		CRYPTO_SECRET_IV: process.env.CRYPTO_SECRET_IV,
+		CRYPTO_SECRET_KEY: process.env.CRYPTO_SECRET_KEY,
+	},
+	aws: {
+		accessId: process.env.AWS_ACCESS_ID,
+		accessSecret: process.env.AWS_ACCESS_SECRET,
+		region: process.env.AWS_REGION,
+		signature: process.env.AWS_SIGNATURE_V,
+		iconBucketUrl: process.env.AWS_ICON_BUCKET_URL,
+	},
+	db: {
+		URI: process.env.MONGODB_URI,
+	},
+	frontend: {
+		base: process.env.FRONTEND_BASE,
+		oauthRedirect: process.env.FRONTEND_OAUTH_REDIRECT,
+	},
+	jwt: {
+		SECRET: process.env.JWT_SECRET,
+		TOKEN_TYPE: process.env.JWT_TOKEN_TYPE,
+	},
+	logs: {
+		level: process.env.LOG_LEVEL || 'silly',
+		directory: process.env.LOG_DIRECTORY,
+	},
+	rabbitMQ: {
+		host: process.env.RABBITMQ_HOST || 'amqp://localhost',
+	},
+	sendgrid: {
+		apiKey: String(process.env.SENDGRID_API_KEY),
+	},
 }
 
 export default config

@@ -7,7 +7,7 @@ import { bcryptEncode } from '../../library/helpers/bcrypt'
 import { User } from '../../components/user/models/User'
 import ConnectDatabase from '../connectDB'
 import DisconnectDatabase from '../disconnectDB'
-import Logger from '../../library/helpers/loggers'
+import Logger from '../../library/helpers/logger'
 
 async function updateFriends(userIds: string[]) {
 	const usersList = await User.find()

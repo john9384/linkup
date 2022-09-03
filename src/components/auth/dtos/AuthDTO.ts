@@ -8,9 +8,11 @@ import {
 	IResetPassword,
 	ISignup,
 } from '../../../types/auth'
+import { ICreateUser } from '../../user/types/dtos'
+import { IUser } from '../../user/types/model'
 
 class AuthDTO implements IAuthDTO {
-	public signup(payload: ISignup): Partial<ISignup> {
+	public signup(payload: ISignup): ICreateUser {
 		const { email, firstname, lastname, password } = payload
 		const hash = bcrypt.hashSync(password, 10)
 		return {
@@ -26,7 +28,7 @@ class AuthDTO implements IAuthDTO {
 			token: payload.token,
 		}
 	}
-	public login(payload: ILogin): Partial<ILogin> {
+	public login(payload: ILogin): ILogin {
 		const { email, password } = payload
 		return {
 			email: lowerCase(email.trim()),

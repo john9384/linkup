@@ -1,3 +1,4 @@
+import { ICreateUser } from '../../components/user/types/dtos'
 export interface ISignup {
 	firstname: string
 	lastname: string
@@ -26,7 +27,7 @@ export interface IResetPassword {
 }
 
 export interface IAuthDTO {
-	signup: (payload: ISignup) => Partial<ISignup>
+	signup: (payload: ISignup) => ICreateUser
 	verifyEmail(payload: IAuthToken): IAuthToken
 	login(payload: ILogin): Partial<ILogin>
 	forgotPassword(payload: IForgotPassword): IForgotPassword

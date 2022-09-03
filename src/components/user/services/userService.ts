@@ -3,9 +3,9 @@ import { IUser } from '../types/model'
 import { ICreateUser, IQueryUser, IUpdateUser } from '../types/dtos'
 import userRepository from '../repositories/userRepository'
 import { bcryptEncode } from '../../../library/helpers/bcrypt'
-import { CustomError } from '../../../library/helpers/error'
 import { generateUsername } from '../../../library/utils/username-generator'
 import { BAD_REQUEST } from '../../../library/constants/http-status'
+import { BadRequestError } from '../../../library/helpers/error'
 
 class UserService {
 	fetchUsers = async (
@@ -59,16 +59,13 @@ class UserService {
 	}
 
 	createUser = async (formData: ICreateUser): Promise<IUser> => {
-		const { firstname, lastname, email } = formData
+		const { firstname, lastname, email, password } = formData
 		const user = await this.fetchOneUser({ email }, ['email'])
 
 		if (user) {
-			throw new CustomError({
-				message: 'User with email exits',
-				status: BAD_REQUEST,
-			})
+			throw new BadRequestError('User with email exits')
 		}
-		const password = await bcryptEncode(formData.password)
+
 		const username = generateUsername(firstname, lastname)
 		const newUser = await userRepository.createUser({
 			firstname,

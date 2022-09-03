@@ -1,26 +1,20 @@
-import Logger from '../../library/helpers/loggers'
+import Logger from '../../library/helpers/logger'
 // import { sendMail } from '../../../library/helpers/mail'
-import { validateFormData } from '../../library/utils/validate-form-data'
 import { ICreateOtp } from './types/formTypes'
 import { IOtp } from './types/modelTypes'
 import { VOtp } from './utils/validators'
 import otpRepository from './otpRepository'
 import { otpIsValid } from './utils/is-valid-otp'
-import { ValidationError } from '../../library/helpers/error'
-import { BAD_REQUEST } from '../../library/constants/http-status'
+import { BadRequestError } from '../../library/helpers/error'
 
 class OtpService {
 	request = async (formData: ICreateOtp): Promise<object> => {
-		validateFormData(VOtp, formData)
-
 		const { userId, transporter, transporterType, instance } = formData
 
 		if (transporterType && !['EMAIL', 'PHONE'].includes(transporterType)) {
-			throw new ValidationError({
-				message:
-					'Invalid transporterType. transporterType is either EMAIL or PHONE',
-				status: BAD_REQUEST,
-			})
+			throw new BadRequestError(
+				'Invalid transporterType. transporterType is either EMAIL or PHONE',
+			)
 		}
 
 		const otp = await otpRepository.fetchOneOtp({

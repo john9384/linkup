@@ -1,44 +1,59 @@
-import express, { Request, Response, NextFunction } from 'express'
-import path from 'path'
 import cors from 'cors'
-import i18next from 'i18next'
-import i18nextBackend from 'i18next-fs-backend'
-import i18nextMiddleware from 'i18next-http-middleware'
-import morganMiddleware from '../library/middlewares/morgan'
-import Logger from '../library/helpers/loggers'
-import { IError } from '../library/helpers/error'
+import morgan from 'morgan'
+import helmet from 'helmet'
 import routes from './routes'
-import { i18tn } from '../library/helpers/i18tn'
+import methodOverride from 'method-override'
+import cookieParser from 'cookie-parser'
+import path from 'path'
+import {
+	logger,
+	NotFoundError,
+	ApiError,
+	InternalError,
+} from '../library/helpers'
+import express, { Application, Request, Response, NextFunction } from 'express'
 
-const app = express()
-
-app.use(cors())
-app.use(express.raw())
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
-app.use('/', express.static(path.join(__dirname, 'src/app/public')))
-app.use(morganMiddleware)
-
-app.get('/', (req, res) => {
-	res.send({
-		app: process.env.APP_NAME,
-		message: i18tn.t('app.running', { appName: process.env.APP_NAME }),
-		status: 200,
+export default (): Application => {
+	process.on('uncaughtException', e => {
+		logger.error(e)
 	})
-})
-app.use('/', routes)
 
-app.get('*', (_, res) => res.send('Invalid route'))
+	const app = express()
 
-app.use((error: IError, req: Request, res: Response, next: NextFunction) => {
-	Logger.error(error.stack)
+	app.use(cors())
+	app.use(methodOverride())
+	app.use(morgan('dev'))
+	app.use(express.json())
+	app.use(express.json({ limit: '2mb' }))
+	app.use(
+		express.urlencoded({
+			limit: '2mb',
+			extended: true,
+		}),
+	)
+	app.use('/', express.static(path.join(__dirname, 'src/app/public')))
+	app.set('view engine', 'html')
+	app.use(cookieParser())
+	app.use(helmet())
+	app.set('trust proxy', 1)
+	app.use('/', routes)
 
-	return res.status(error.status || 500).send({
-		success: false,
-		message: error.message || 'Failed',
-		data: error.data || {},
-		error,
+	// catch 404 and forward to error handler
+	app.use((_req, _res, next) => next(new NotFoundError()))
+
+	// Middleware Error Handler
+	app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
+		if (err instanceof ApiError) {
+			logger.error(err.stack)
+			return ApiError.handle(err, res)
+		} else {
+			if (process.env.NODE_ENV === 'development') {
+				logger.error(err.stack)
+				return res.status(500).send(err.message)
+			}
+			return ApiError.handle(new InternalError(), res)
+		}
 	})
-})
 
-export default app
+	return app
+}

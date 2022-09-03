@@ -1,7 +1,13 @@
 {
 	"parser": "@typescript-eslint/parser",
-	"extends": ["prettier"],
-	"ignorePatterns": ["*.log"],
+	"extends": [
+		"plugin:@typescript-eslint/recommended",
+		"prettier",
+		"plugin:prettier/recommended"
+	],
+	"ignorePatterns": [
+		"*.log"
+	],
 	"parserOptions": {
 		"ecmaVersion": "latest",
 		"sourceType": "module",
@@ -15,12 +21,13 @@
 		"isProduction": true,
 		"__ROUTE__": true
 	},
-	"rules": {
-		"max-classes-per-file": "off"
-	},
+	"rules": {},
 	"overrides": [
 		{
-			"files": ["src/scripts/*.ts", "src/views/*.ts"],
+			"files": [
+				"src/scripts/*.ts",
+				"src/views/*.ts"
+			],
 			"rules": {
 				"no-console": "off",
 				"quotes": "off",

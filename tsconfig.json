@@ -1,8 +1,9 @@
 {
 	"baseUrl": "./src",
 	"compilerOptions": {
+		"incremental": true,
 		"lib": ["es5", "es6"],
-		"target": "es6",
+		"target": "es2019",
 		"module": "commonjs",
 		"resolveJsonModule": true,
 		"esModuleInterop": true,
@@ -13,7 +14,7 @@
 		"emitDecoratorMetadata": true,
 		"experimentalDecorators": true,
 		"strictPropertyInitialization": false,
-		"typeRoots": ["./@types", "./node_modules/@types"]
+		"typeRoots": ["./src/app/types", "./node_modules/@types"]
 	},
 	"include": ["src/**/*.ts"],
 	"exclude": ["node_modules"]

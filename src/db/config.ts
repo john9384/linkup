@@ -1,7 +1,7 @@
 import path from 'path'
 import dotenv from 'dotenv'
 import fs from 'fs'
-import Logger from '../library/helpers/loggers'
+import Logger from '../library/helpers/logger'
 
 if (process.env.ENVIRONMENT === 'development' && !fs.existsSync('.env')) {
 	Logger.error('.env file not found')

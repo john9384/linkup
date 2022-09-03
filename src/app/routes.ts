@@ -7,11 +7,11 @@ import config from '../config'
 
 const router = express.Router()
 
-const { API_PREFIX } = config
+const PREFIX = config.api.PREFIX
 
-router.use(`/${API_PREFIX}/auth`, authRouter)
-router.use(`/${API_PREFIX}/users`, userRouter)
-router.use(`/${API_PREFIX}/profiles`, profileRouter)
-router.use(`/${API_PREFIX}/posts`, postRouter)
+router.use(`/${PREFIX}/auth`, authRouter)
+router.use(`/${PREFIX}/users`, userRouter)
+router.use(`/${PREFIX}/profiles`, profileRouter)
+router.use(`/${PREFIX}/posts`, postRouter)
 
 export default router

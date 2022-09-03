@@ -1,5 +1,5 @@
 export { IAuthController } from './IAuthController'
-export { IAuthService } from './IAuthService'
+export { IAuthService, ILoginService } from './IAuthService'
 export {
 	ISignup,
 	ILogin,

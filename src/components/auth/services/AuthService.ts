@@ -1,6 +1,4 @@
-import { BAD_REQUEST } from '../../../library/constants/http-status'
 import { bcryptCompare, bcryptEncode } from '../../../library/helpers/bcrypt'
-import { ValidationError, CustomError } from '../../../library/helpers/error'
 import { jwtEncode } from '../../../library/helpers/jwt'
 import userRepository from '../../user/repositories/userRepository'
 import { otpService } from '../../otp'
@@ -8,16 +6,20 @@ import { otpIsValid } from '../../otp/utils/is-valid-otp'
 import { userService } from '../../user'
 import { IUser } from '../../user/types/model'
 import { ISignup, ILogin } from '../types/forms'
-import { IAuthService } from '../../../types/auth'
 import {
+	IAuthService,
 	IAuthToken,
 	IForgotPassword,
 	IResetPassword,
-} from '../../../types/auth/IAuthDTO'
+} from '../../../types/auth'
+import { BadRequestError } from '../../../library/helpers'
+import { authDTO } from '../dtos'
+import { ILoginService } from '../../../types/auth/IAuthService'
 
 class AuthService implements IAuthService {
-	signup = async (formData: ISignup) => {
-		const newUser: IUser = await userService.createUser(formData)
+	public async signup(formData: ISignup): Promise<Partial<IUser>> {
+		const dto = authDTO.signup(formData)
+		const newUser: IUser = await userService.createUser(dto)
 
 		otpService.request({
 			userId: newUser.id,
@@ -27,39 +29,6 @@ class AuthService implements IAuthService {
 		})
 
 		return { email: newUser.email }
-	}
-
-	public async login(
-		formData: ILogin,
-	): Promise<{ email: string | undefined; token: string }> {
-		const { email, password } = formData
-		const user = await userService.fetchOneUser({ email }, [
-			'id',
-			'email',
-			'password',
-		])
-
-		if (!user) {
-			throw new ValidationError({
-				message: 'Invalid Credential, Check the email you inputed',
-				status: BAD_REQUEST,
-			})
-		}
-
-		const passwordValid = await bcryptCompare(password, user?.password || '')
-		if (!passwordValid) {
-			throw new ValidationError({
-				message: 'Invalid password',
-				status: BAD_REQUEST,
-			})
-		}
-
-		const encodedData = jwtEncode({ userId: user?.id, email: user?.email })
-
-		return {
-			email: user.email,
-			token: encodedData,
-		}
 	}
 
 	public async verifyEmail(formData: IAuthToken): Promise<Partial<IUser>> {
@@ -75,6 +44,35 @@ class AuthService implements IAuthService {
 		}
 	}
 
+	public async login(formData: ILogin): Promise<ILoginService> {
+		const dto = authDTO.login(formData)
+		const user = await userService.fetchOneUser({ email: dto.email }, [
+			'id',
+			'email',
+			'password',
+		])
+
+		if (!user) {
+			throw new BadRequestError(
+				'Invalid Credential, Check the email you inputed',
+			)
+		}
+
+		const passwordValid = bcryptCompare(dto.password, user.password)
+		if (!passwordValid) {
+			throw new BadRequestError(
+				'Invalid Credential, Check the email or password',
+			)
+		}
+
+		const encodedData = jwtEncode({ userId: user?.id, email: user?.email })
+
+		return {
+			email: dto.email,
+			token: encodedData,
+		}
+	}
+
 	public async forgotPassword(
 		formData: IForgotPassword,
 	): Promise<{ email: string; message: string }> {
@@ -83,10 +81,7 @@ class AuthService implements IAuthService {
 		})
 
 		if (!userExist) {
-			throw new CustomError({
-				message: 'Email supplied does not exist',
-				status: BAD_REQUEST,
-			})
+			throw new BadRequestError('Email supplied does not exist')
 		}
 
 		otpService.request({
@@ -118,10 +113,7 @@ class AuthService implements IAuthService {
 		})
 
 		if (!userExist) {
-			throw new CustomError({
-				message: 'Invalid Email',
-				status: BAD_REQUEST,
-			})
+			throw new BadRequestError('Invalid Email')
 		}
 
 		const { newPassword } = formData
