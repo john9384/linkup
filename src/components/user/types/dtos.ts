@@ -8,7 +8,7 @@ export interface ICreateUser {
 }
 
 export interface IUpdateUser {
-	[key: string]: string | number | boolean
+	[key: string]: any
 }
 
 export interface IQueryUser {

@@ -82,8 +82,6 @@ class UserService {
 		data: IUpdateUser,
 	): Promise<IUser | null> => {
 		const user = await userRepository.updateUser(query, data)
-		// Todo
-		// Hash neccessary field befor update
 		return user
 	}
 

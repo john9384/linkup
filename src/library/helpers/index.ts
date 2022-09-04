@@ -1,6 +1,6 @@
 export { getSignedUrl } from './aws'
 export { default as logger } from './logger'
-export { default as tryCatcher } from './tryCatcher'
+export { catchErrors } from './catchErrors'
 export {
 	titleCase,
 	lowerCase,

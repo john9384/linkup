@@ -29,8 +29,8 @@ export interface IResetPassword {
 export interface IAuthDTO {
 	signup: (payload: ISignup) => ICreateUser
 	verifyEmail(payload: IAuthToken): IAuthToken
-	login(payload: ILogin): Partial<ILogin>
+	login(payload: ILogin): ILogin
 	forgotPassword(payload: IForgotPassword): IForgotPassword
 	verifyToken(payload: IAuthToken): IAuthToken
-	resetPassword(payload: IResetPassword): IResetPassword
+	resetPassword(payload: IResetPassword): Partial<IResetPassword>
 }

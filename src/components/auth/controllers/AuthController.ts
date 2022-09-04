@@ -10,8 +10,9 @@ class AuthController implements IAuthController {
 	public async signup(req: Request, res: Response) {
 		const formData = req.body
 
+		console.log('Gets here', formData)
 		const responseData = await authService.signup(formData)
-
+		console.log(responseData)
 		return new SuccessResponse('User Signed up', responseData).send(res)
 	}
 

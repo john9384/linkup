@@ -32,7 +32,8 @@ class AuthService implements IAuthService {
 	}
 
 	public async verifyEmail(formData: IAuthToken): Promise<Partial<IUser>> {
-		const otp = await otpIsValid(formData.token)
+		const dto = authDTO.verifyEmail(formData)
+		const otp = await otpIsValid(dto.token)
 
 		await userRepository.updateUser(
 			{ email: otp.transporter },
@@ -76,8 +77,9 @@ class AuthService implements IAuthService {
 	public async forgotPassword(
 		formData: IForgotPassword,
 	): Promise<{ email: string; message: string }> {
+		const dto = authDTO.forgotPassword(formData)
 		const userExist = await userRepository.fetchOneUser({
-			email: formData.email,
+			email: dto.email,
 		})
 
 		if (!userExist) {
@@ -98,7 +100,8 @@ class AuthService implements IAuthService {
 	}
 
 	public async verifyToken(formData: IAuthToken): Promise<Partial<IUser>> {
-		const otp = await otpIsValid(formData.token)
+		const dto = authDTO.verifyToken(formData)
+		const otp = await otpIsValid(dto.token)
 
 		return {
 			email: otp.transporter,
@@ -108,18 +111,19 @@ class AuthService implements IAuthService {
 	public async resetPassword(
 		formData: IResetPassword,
 	): Promise<{ message: string }> {
+		const dto = authDTO.resetPassword(formData)
 		const userExist = await userRepository.fetchOneUser({
-			email: formData.email,
+			email: dto.email,
 		})
 
 		if (!userExist) {
 			throw new BadRequestError('Invalid Email')
 		}
 
-		const { newPassword } = formData
-		const password = await bcryptEncode(newPassword)
-
-		await userService.updateUser({ email: userExist.email }, { password })
+		await userService.updateUser(
+			{ email: userExist.email },
+			{ password: dto.newPassword },
+		)
 
 		return {
 			message: 'Password reset successful',

@@ -1,4 +1,4 @@
-import { Router } from 'express'
+import { Request, Response, Router } from 'express'
 import { authController } from '../controllers'
 import schema from './schemas'
 import {
@@ -6,9 +6,13 @@ import {
 	ValidationSource,
 	isAuthenticated,
 } from '../../../library/middlewares'
-import catchErrors from '../../../library/utils/error-boundary'
+import { catchErrors } from '../../../library/helpers'
 
 const authRouter = Router()
+
+authRouter.get('/health', (req: Request, res: Response) => {
+	res.status(200).send({ msg: 'Application running' })
+})
 
 authRouter.post(
 	'/signup',
@@ -17,7 +21,7 @@ authRouter.post(
 )
 authRouter.post(
 	'/verify-email',
-	validator(schema.verifyEmail),
+	// validator(schema.verifyEmail),
 	catchErrors(authController.verifyEmail),
 )
 authRouter.post(

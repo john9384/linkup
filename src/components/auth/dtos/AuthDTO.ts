@@ -46,12 +46,12 @@ class AuthDTO implements IAuthDTO {
 			token: payload.token,
 		}
 	}
-	public resetPassword(payload: IResetPassword): IResetPassword {
-		const { email, newPassword, confirmPassword } = payload
+	public resetPassword(payload: IResetPassword): Partial<IResetPassword> {
+		const { email, newPassword } = payload
+		const hash = bcrypt.hashSync(newPassword, 10)
 		return {
 			email: lowerCase(email.trim()),
-			newPassword,
-			confirmPassword,
+			newPassword: hash,
 		}
 	}
 }

@@ -3,10 +3,11 @@ import cluster from 'cluster'
 import os from 'os'
 import config from '../../config'
 import Logger from '../../library/helpers/logger'
-import app from '../../app'
+import Application from '../../app'
 import ConnectDatabase from '../../db/connectDB'
 
 const PORT = config.app.PORT || 4000
+const app = Application()
 
 // if (cluster.isPrimary) {
 // 	const cpuCoreCount = os.cpus().length
