@@ -1,15 +1,14 @@
 import BaseRepository from '../../../db/repository/BaseRepository'
 import { User } from '../models/User'
-import { ICreateUser, IUpdateUser, IQueryUser } from '../types/dtos'
-import { IUser } from '../types/model'
+import { IUser, ICreateUser, IUpdateUser, IReadUser } from '../../../types/user'
 
 class UserRepository extends BaseRepository {
-	fetchUsers = async (query?: IQueryUser): Promise<IUser[] | null> => {
-		const users = await this.fetch<IQueryUser, IUser[]>(query)
+	fetchUsers = async (query?: IReadUser): Promise<IUser[] | null> => {
+		const users = await this.fetch<IReadUser, IUser[]>(query)
 		return users
 	}
-	fetchOneUser = async (query: IQueryUser): Promise<IUser | null> => {
-		const user = await this.fetchOne<IQueryUser, IUser>(query)
+	fetchOneUser = async (query: IReadUser): Promise<IUser | null> => {
+		const user = await this.fetchOne<IReadUser, IUser>(query)
 		return user
 	}
 
@@ -19,10 +18,10 @@ class UserRepository extends BaseRepository {
 	}
 
 	updateUser = async (
-		query: IQueryUser,
+		query: IReadUser,
 		data: IUpdateUser,
 	): Promise<IUser | null> => {
-		const updatedUser = await this.update<IQueryUser, IUpdateUser, IUser>(
+		const updatedUser = await this.update<IReadUser, IUpdateUser, IUser>(
 			query,
 			data,
 		)
@@ -31,6 +30,4 @@ class UserRepository extends BaseRepository {
 	}
 }
 
-const userRepository = new UserRepository(User)
-
-export default userRepository
+export const userRepository = new UserRepository(User)

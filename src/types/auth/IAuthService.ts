@@ -1,4 +1,4 @@
-import { IUser } from '../../components/user/types/model'
+import { IUser } from '../user'
 import {
 	ISignup,
 	ILogin,

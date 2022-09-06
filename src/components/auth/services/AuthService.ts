@@ -1,10 +1,9 @@
 import { bcryptCompare, bcryptEncode } from '../../../library/helpers/bcrypt'
 import { jwtEncode } from '../../../library/helpers/jwt'
-import userRepository from '../../user/repositories/userRepository'
+import { userRepository } from '../../user/repositories'
 import { otpService } from '../../otp'
 import { otpIsValid } from '../../otp/utils/is-valid-otp'
 import { userService } from '../../user'
-import { IUser } from '../../user/types/model'
 import { ISignup, ILogin } from '../types/forms'
 import {
 	IAuthService,
@@ -15,6 +14,7 @@ import {
 import { BadRequestError } from '../../../library/helpers'
 import { authDTO } from '../dtos'
 import { ILoginService } from '../../../types/auth/IAuthService'
+import { IUser } from '../../../types/user'
 
 class AuthService implements IAuthService {
 	public async signup(formData: ISignup): Promise<Partial<IUser>> {

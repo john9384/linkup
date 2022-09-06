@@ -1,8 +1,8 @@
 import { IPost } from '../types/modelTypes'
 import { ICreatePost, IQueryPost, IUpdatePost } from '../types/formTypes'
 import postRepository from '../repositories/postRepository'
-import profileService from '../../user/services/profileService'
 import { PaginationOptions } from '../../../db/repository/types'
+import { userService } from '../../user/services/UserService'
 
 class PostService {
 	fetchPosts = async (
@@ -27,10 +27,12 @@ class PostService {
 	}
 
 	createPost = async (data: ICreatePost): Promise<IPost> => {
-		const userPayload = await profileService.fetchOneProfile(
-			{ id: data.userId },
-			['fullname', 'username', 'avatar'],
-		)
+		const userPayload = await userService.fetchOneUser({ id: data.userId }, [
+			'firstname',
+			'lastname',
+			'username',
+			'avatar',
+		])
 		const newPost = await postRepository.createPost({
 			user: userPayload,
 			...data,

@@ -1,4 +1,4 @@
-import { ICreateUser } from '../../components/user/types/dtos'
+import { ICreateUser } from '../user'
 export interface ISignup {
 	firstname: string
 	lastname: string

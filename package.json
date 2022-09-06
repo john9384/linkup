@@ -11,7 +11,7 @@
 		"build": "npm run clean && npm run build-ts && npm run copy-assets",
 		"build-ts": "tsc",
 		"watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run watch-node\"",
-		"watch-node": "nodemon build/bin/www/server.js",
+		"watch-node": "nodemon src/bin/www/server.ts",
 		"watch-ts": "tsc -w",
 		"clean": "rimraf ./build",
 		"test": "ENV_FILE=./.env.test jest --detectOpenHandles",

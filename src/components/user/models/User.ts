@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { Schema, model } from 'mongoose'
 
 const userSchema = new Schema(
@@ -34,7 +33,7 @@ const userSchema = new Schema(
 		avatar: {
 			type: String,
 			trim: true,
-			defualt: 'Hello',
+			defualt: '',
 		},
 		bgImgUrl: {
 			type: String,

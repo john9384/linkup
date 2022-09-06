@@ -1,7 +1,6 @@
 import express, { Request, Response } from 'express'
 import { authRouter } from '../components/auth/routes'
-import userRouter from '../components/user/routes/userRoutes'
-import profileRouter from '../components/user/routes/profileRoutes'
+import { userRouter } from '../components/user/routes'
 import postRouter from '../components/posts/routes/postRoutes'
 import config from '../config'
 import { logger } from '../library/helpers'
@@ -20,7 +19,6 @@ router.get('/', (req: Request, res: Response) => {
 
 router.use(`/${PREFIX}/auth`, authRouter)
 router.use(`/${PREFIX}/users`, userRouter)
-router.use(`/${PREFIX}/profiles`, profileRouter)
 router.use(`/${PREFIX}/posts`, postRouter)
 
 export default router

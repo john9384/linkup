@@ -1,27 +1,25 @@
 import _ from 'lodash'
-import { IUser } from '../types/model'
-import { ICreateUser, IQueryUser, IUpdateUser } from '../types/dtos'
-import userRepository from '../repositories/userRepository'
-import { bcryptEncode } from '../../../library/helpers/bcrypt'
+import { IUser, ICreateUser, IReadUser, IUpdateUser } from '../../../types/user'
+import { userRepository } from '../repositories'
 import { generateUsername } from '../../../library/utils/username-generator'
-import { BAD_REQUEST } from '../../../library/constants/http-status'
 import { BadRequestError } from '../../../library/helpers/error'
+import { userPresenter } from '../presenters/UserPresenter'
 
 class UserService {
 	fetchUsers = async (
-		query?: IQueryUser,
-		fields?: string[],
+		query?: IReadUser,
+		fields?: Array<keyof IUser>,
 	): Promise<(Partial<IUser> | null)[]> => {
 		const users = await userRepository.fetchUsers(query)
 
 		if (!users) return []
 
 		if (fields) {
-			return users.map(user => this.serialize(user, fields))
+			return users.map(user => userPresenter.serialize(user, fields))
 		}
 
 		return users.map(user =>
-			this.serialize(user, [
+			userPresenter.serialize(user, [
 				'id',
 				'firstname',
 				'lastname',
@@ -35,18 +33,18 @@ class UserService {
 	}
 
 	fetchOneUser = async (
-		query: IQueryUser,
-		fields?: string[],
+		query: IReadUser,
+		fields?: Array<keyof IUser>,
 	): Promise<Partial<IUser | null>> => {
 		const user = await userRepository.fetchOneUser(query)
 
 		if (!user) return null
 
 		if (fields) {
-			return this.serialize(user, fields)
+			return userPresenter.serialize(user, fields)
 		}
 
-		return this.serialize(user, [
+		return userPresenter.serialize(user, [
 			'id',
 			'firstname',
 			'lastname',
@@ -78,35 +76,16 @@ class UserService {
 	}
 
 	updateUser = async (
-		query: IQueryUser,
+		query: IReadUser,
 		data: IUpdateUser,
 	): Promise<IUser | null> => {
 		const user = await userRepository.updateUser(query, data)
 		return user
 	}
 
-	private serialize(user: IUser, fields: string[]): Partial<IUser> | null {
-		if (!user) return null
-
-		const userData = {
-			id: user.id,
-			firstname: user.firstname,
-			lastname: user.lastname,
-			email: user.email,
-			password: user.password,
-			username: user.username,
-			phone: user.phone,
-			avatar: user.avatar,
-			bgImgUrl: user.bgImgUrl,
-			gender: user.gender,
-			religion: user.religion,
-			location: user.location,
-			emailVerified: user.emailVerified,
-			phoneVerified: user.phoneVerified,
-		}
-
-		return _.pick(userData, fields)
+	deleteUser = async (query: IReadUser): Promise<boolean> => {
+		return await userRepository.destroy(query)
 	}
 }
 
-export default new UserService()
+export const userService = new UserService()
