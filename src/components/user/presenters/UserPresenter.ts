@@ -5,14 +5,19 @@ import { IUser } from '../../../types/user'
 class UserPresenter implements IUserPresenter {
 	public serialize(
 		userDocument: IUser,
-		selectors: Array<keyof IUser> = ['email'],
+		selectors: Array<keyof IUser> = [],
 	): Partial<IUser> {
+		// This protects password from being returned when all user data is required
+		const password = selectors.length > 0 ? userDocument.password : ''
+
 		const userEntity = {
+			id: userDocument.id,
 			email: userDocument.email,
 			lastname: userDocument.lastname,
 			firstname: userDocument.firstname,
+			fullname: `${userDocument.firstname} ${userDocument.lastname}`,
 			phone: userDocument.phone,
-			password: userDocument.password,
+			password,
 			username: userDocument.username,
 			avatar: userDocument.avatar,
 			bgImgUrl: userDocument.bgImgUrl,
@@ -21,10 +26,9 @@ class UserPresenter implements IUserPresenter {
 			location: userDocument.location,
 			emailVerified: userDocument.emailVerified,
 			phoneVerified: userDocument.phoneVerified,
-			// friends: userDocument.friends,
 		}
 
-		return _.pick(userEntity, selectors)
+		return selectors.length > 0 ? _.pick(userEntity, selectors) : userEntity
 	}
 }
 

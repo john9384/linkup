@@ -4,6 +4,7 @@ export interface IUser {
 	id: string
 	firstname: string
 	lastname: string
+	fullname?: string
 	email: string
 	password: string
 	gender?: string

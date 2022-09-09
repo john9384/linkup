@@ -1,7 +1,5 @@
 import { Request, Response } from 'express'
 import { authService } from '../services'
-import { OK } from '../../../library/constants/http-status'
-import { buildResponse } from '../../../library/utils/response-builder'
 import { IAuthController } from '../../../types/auth'
 import { userService } from '../../user'
 import { SuccessResponse } from '../../../library/helpers'
@@ -31,12 +29,8 @@ class AuthController implements IAuthController {
 
 		const responseData = await authService.forgotPassword(formData)
 
-		return res.status(OK).send(
-			buildResponse({
-				success: true,
-				message: 'Successful',
-				data: responseData,
-			}),
+		return new SuccessResponse('Token sent to your email', responseData).send(
+			res,
 		)
 	}
 
@@ -45,42 +39,21 @@ class AuthController implements IAuthController {
 
 		const responseData = await authService.verifyToken(formData)
 
-		return res.status(OK).send(
-			buildResponse({
-				success: true,
-				message: 'Token verified',
-				data: responseData,
-			}),
-		)
+		return new SuccessResponse('Token Verified', responseData).send(res)
 	}
 
 	public async resetPassword(req: Request, res: Response) {
 		const formData = req.body
 
 		const responseData = await authService.resetPassword(formData)
-
-		return res.status(OK).send(
-			buildResponse({
-				success: true,
-				message: 'Password Reset successful',
-				data: responseData,
-			}),
-		)
+		return new SuccessResponse('User Password reset', responseData).send(res)
 	}
 
 	public async currentUser(req: Request, res: Response) {
-		const userId = req.user?.id
+		const userId = req.userId
+		const responseData = await userService.fetchOneUser({ id: userId }, [])
 
-		const user = await userService.fetchOneUser({ id: userId })
-		const responseData = user
-
-		return res.status(OK).send(
-			buildResponse({
-				success: true,
-				message: 'Ok',
-				data: responseData,
-			}),
-		)
+		return new SuccessResponse('User fetched', responseData).send(res)
 	}
 }
 

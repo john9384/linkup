@@ -32,6 +32,7 @@ class BaseRepository {
 		fields?: any,
 	): Promise<TReturn | null> {
 		const queryObj = this._setQueryObj(query)
+
 		const model = await this.Model.findOne(queryObj).select(fields)
 		return model
 	}

@@ -38,7 +38,7 @@ class PostController {
 
 	createPost = async (req: Request, res: Response) => {
 		// Validate post
-		const userId = req.user.id
+		const userId = req.userId
 		const { content } = req.body
 		const responseData = await postService.createPost({
 			userId,
@@ -71,7 +71,7 @@ class PostController {
 
 	toggleLikePost = async (req: Request, res: Response) => {
 		const postId = req.params.id
-		const userId = req.user.id
+		const userId = req.userId
 		const responseData = await postService.toggleLikePost(postId, userId)
 
 		return res.status(OK).send(

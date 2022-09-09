@@ -1,40 +1,46 @@
 import { Request, Response, NextFunction } from 'express'
-import { UNAUTHORIZED } from '../constants/http-status'
 import { jwtDecode } from '../helpers/jwt'
-import { buildResponse } from '../utils/response-builder'
+import {
+	AccessTokenError,
+	AuthFailureError,
+	TokenExpiredError,
+} from '../helpers/error'
+import { userService } from '../../components/user/services/UserService'
+import { logger } from '../helpers'
 
 const isAuthenticated = async (
 	req: Request,
 	res: Response,
 	next: NextFunction,
 ) => {
-	if (!req.header('Authorization')) {
-		throw new Error('Unauthorized')
-		// throw new Error({
-		// 	message: 'Unauthorized',
-		// 	status: UNAUTHORIZED,
-		// })
-	}
-
-	const token: string = req?.header('Authorization')?.split(' ')[1] || ''
-
 	try {
-		const decoded: any = jwtDecode(token)
-		req.user = {
-			id: decoded.userId,
-			email: decoded.email,
+		if (!req.header('Authorization')) {
+			throw new TokenExpiredError('Token has Expired')
 		}
 
-		next()
+		const token: string = req?.header('Authorization')?.split(' ')[1] || ''
+		if (token === '') {
+			throw new TokenExpiredError('Token has Expired')
+		}
+
+		const decoded: any = jwtDecode(token)
+		const user = await userService.fetchOneUser({ email: decoded.email })
+
+		if (!user) {
+			logger.error('User not registered or Invalid access token')
+			throw new AuthFailureError('User not registered or Invalid access token')
+		}
+
+		req.userId = user.id
+		req.userEmail = user.email
+
+		return next()
 	} catch (error: any) {
-		return res.status(UNAUTHORIZED).send(
-			buildResponse({
-				success: true,
-				message: error.message,
-				data: {},
-			}),
-		)
+		if (error instanceof TokenExpiredError) {
+			next(new AccessTokenError(error.message))
+		}
+		next(error)
 	}
 }
 
-export { isAuthenticated as isAuthenticated }
+export { isAuthenticated }
