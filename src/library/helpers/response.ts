@@ -3,7 +3,7 @@ import logger from './logger'
 
 export interface ResponseData {
 	success?: boolean
-	content: object
+	data: object
 	message: string
 }
 
@@ -77,9 +77,9 @@ export class ForbiddenResponse extends ApiResponse {
 }
 
 export class InvalidInputResponse<T> extends ApiResponse {
-	constructor(message: string, private content: T) {
+	constructor(message: string, private data: T) {
 		super(StatusCode.FAILURE, ResponseStatus.UNPROCESSABLE_ENTITY, message)
-		logger.info(JSON.stringify(this.content, null, 4))
+		logger.info(JSON.stringify(this.data, null, 4))
 	}
 
 	send(res: Response): Response {
@@ -112,9 +112,9 @@ export class FailureMsgResponse extends ApiResponse {
 }
 
 export class SuccessResponse<T> extends ApiResponse {
-	constructor(message: string, private content: T) {
+	constructor(message: string, private data: T) {
 		super(StatusCode.SUCCESS, ResponseStatus.SUCCESS, message)
-		logger.info(JSON.stringify(this.content, null, 4))
+		logger.info(JSON.stringify(this.data, null, 4))
 	}
 
 	send(res: Response): Response {
