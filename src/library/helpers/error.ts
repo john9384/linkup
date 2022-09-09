@@ -26,7 +26,7 @@ export class AppError {
 	name: string
 	date: Date
 	httpCode: number
-	content: string | unknown
+	data: string | unknown
 	isOperational: boolean
 	message: string
 	innerException: string | null
@@ -34,7 +34,7 @@ export class AppError {
 		name: string,
 		httpCode: number,
 		message: string,
-		content: string | unknown,
+		data: string | unknown,
 		isOperational: boolean,
 		innerException: string | null,
 	) {
@@ -42,7 +42,7 @@ export class AppError {
 		this.name = name
 		this.date = new Date()
 		this.httpCode = httpCode
-		this.content = content
+		this.data = data
 		this.isOperational = isOperational
 		this.message = message
 		this.innerException = innerException

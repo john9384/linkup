@@ -1,7 +1,6 @@
 {
 	"name": "linkup-backend",
 	"version": "1.0.0",
-	"main": "src/bin/www/server.ts",
 	"repository": "https://github.com/john9384/linkup-backend.git",
 	"author": "John Damilola Ogungbure <jogungbure@gmail.com>",
 	"license": "MIT",
@@ -11,14 +10,14 @@
 		"build": "npm run clean && npm run build-ts && npm run copy-assets",
 		"build-ts": "tsc",
 		"watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run watch-node\"",
-		"watch-node": "nodemon src/bin/www/server.ts",
+		"watch-node": "nodemon build/bin/www/server.js",
 		"watch-ts": "tsc -w",
 		"clean": "rimraf ./build",
 		"test": "ENV_FILE=./.env.test jest --detectOpenHandles",
 		"lint": "eslint src/**/*.ts",
 		"lint:fix": "eslint src/**/*.ts --fix",
 		"ci": "yarn lint && yarn test",
-		"copy-assets": "node scripts/copy_assets.ts"
+		"copy-assets": "ts-node scripts/copy_assets.ts"
 	},
 	"husky": {
 		"hooks": {

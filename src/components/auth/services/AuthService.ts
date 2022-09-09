@@ -4,12 +4,13 @@ import { userRepository } from '../../user/repositories'
 import { otpService } from '../../otp'
 import { otpIsValid } from '../../otp/utils/is-valid-otp'
 import { userService } from '../../user'
-import { ISignup, ILogin } from '../types/forms'
 import {
 	IAuthService,
 	IAuthToken,
 	IForgotPassword,
+	ILogin,
 	IResetPassword,
+	ISignup,
 } from '../../../types/auth'
 import { BadRequestError } from '../../../library/helpers'
 import { authDTO } from '../dtos'

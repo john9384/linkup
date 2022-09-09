@@ -1,6 +1,3 @@
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { ObjectId } from 'mongodb'
 import { PaginationOptions } from './types'
 
@@ -11,17 +8,17 @@ class BaseRepository {
 		this.Model = Model
 	}
 
-	async fetch<TQuery, TReturn>(query?: TQuery, fields?: any): Promise<TReturn> {
-		const queryObj = this.setQueryObj(query)
+	async fetch<TRead, TReturn>(query?: TRead, fields?: any): Promise<TReturn> {
+		const queryObj = this._setQueryObj(query)
 		const models = await this.Model.find(queryObj).select(fields)
 		return models
 	}
 
-	async fetchAndPaginate<TQuery, TReturn>(
-		query?: TQuery,
+	async fetchAndPaginate<TRead, TReturn>(
+		query?: TRead,
 		pagination?: PaginationOptions,
 	): Promise<TReturn> {
-		const queryObj = this.setQueryObj(query)
+		const queryObj = this._setQueryObj(query)
 		const models = await this.Model.find(queryObj)
 			.sort({ createdAt: -1 })
 			.skip(pagination?.page)
@@ -30,11 +27,11 @@ class BaseRepository {
 		return models
 	}
 
-	async fetchOne<TQuery, TReturn>(
-		query: TQuery,
+	async fetchOne<TRead, TReturn>(
+		query: TRead,
 		fields?: any,
 	): Promise<TReturn | null> {
-		const queryObj = this.setQueryObj(query)
+		const queryObj = this._setQueryObj(query)
 		const model = await this.Model.findOne(queryObj).select(fields)
 		return model
 	}
@@ -45,11 +42,11 @@ class BaseRepository {
 		return model
 	}
 
-	async update<TQuery, TUpdate, TReturn>(
-		query: TQuery,
+	async update<TRead, TUpdate, TReturn>(
+		query: TRead,
 		data: TUpdate,
 	): Promise<TReturn | null> {
-		const queryObj = this.setQueryObj(query)
+		const queryObj = this._setQueryObj(query)
 		const model = await this.Model.findOneAndUpdate(queryObj, data, {
 			new: true,
 		})
@@ -59,20 +56,17 @@ class BaseRepository {
 		return model
 	}
 
-	async destroy<TQuery>(query: TQuery): Promise<boolean> {
-		const queryObj = this.setQueryObj(query)
+	async destroy<TRead>(query: TRead): Promise<boolean> {
+		const queryObj = this._setQueryObj(query)
 		await this.Model.deleteOne(queryObj)
 
 		return true
 	}
 
-	private setQueryObj(obj: any) {
+	private _setQueryObj(obj: any) {
 		if (!obj) return null
-		// eslint-disable-next-line no-prototype-builtins
 		if (obj.hasOwnProperty('id')) {
-			// eslint-disable-next-line @typescript-eslint/naming-convention
 			const _id = new ObjectId(obj.id)
-			// eslint-disable-next-line no-param-reassign
 			delete obj.id
 
 			return {
