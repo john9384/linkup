@@ -17,5 +17,5 @@ export interface IAuthService {
 	login(payload: ILogin): Promise<ILoginService>
 	forgotPassword(payload: IForgotPassword): Promise<Partial<IUser>>
 	verifyToken(payload: IAuthToken): Promise<Partial<IUser>>
-	resetPassword(payload: IResetPassword): Promise<{ message: string }>
+	resetPassword(payload: IResetPassword): Promise<Partial<IUser>>
 }

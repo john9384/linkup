@@ -51,4 +51,4 @@ export {
 	AccessTokenErrorResponse,
 } from './response'
 
-export { i18tn } from './i18tn'
+export { i18n } from './i18n'

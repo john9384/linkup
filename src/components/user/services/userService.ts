@@ -1,15 +1,15 @@
 import _ from 'lodash'
 import { IUser, ICreateUser, IReadUser, IUpdateUser } from '../../../types/user'
 import { userRepository } from '../repositories'
-import { generateUsername } from '../../../library/utils/username-generator'
 import { BadRequestError } from '../../../library/helpers/error'
 import { userPresenter } from '../presenters/UserPresenter'
+import { IUserService } from '../../../types/user/IUserService'
 
-class UserService {
-	fetchUsers = async (
+class UserService implements IUserService {
+	public async fetch(
 		query?: IReadUser,
 		fields?: Array<keyof IUser>,
-	): Promise<(Partial<IUser> | null)[]> => {
+	): Promise<Array<Partial<IUser>> | []> {
 		const users = await userRepository.fetchUsers(query)
 
 		if (!users) return []
@@ -33,11 +33,30 @@ class UserService {
 		)
 	}
 
-	fetchOneUser = async (
+	public async create(formData: ICreateUser): Promise<Partial<IUser>> {
+		const { firstname, lastname, email, password } = formData
+		const user = await this.read({ email }, ['email'])
+
+		if (user) {
+			throw new BadRequestError('User with email exits')
+		}
+
+		const username = this._generateUsername(firstname, lastname)
+		const newUser = await userRepository.createUser({
+			firstname,
+			lastname,
+			email,
+			password,
+			username,
+		})
+		return userPresenter.serialize(newUser, ['email'])
+	}
+
+	public async read(
 		query: IReadUser,
 		fields?: Array<keyof IUser>,
-	): Promise<Partial<IUser | null>> => {
-		const user = await userRepository.fetchOneUser(query)
+	): Promise<Partial<IUser> | null> {
+		const user = await userRepository.readUser(query)
 
 		if (!user) return null
 
@@ -58,35 +77,24 @@ class UserService {
 		])
 	}
 
-	createUser = async (formData: ICreateUser): Promise<IUser> => {
-		const { firstname, lastname, email, password } = formData
-		const user = await this.fetchOneUser({ email }, ['email'])
-
-		if (user) {
-			throw new BadRequestError('User with email exits')
-		}
-
-		const username = generateUsername(firstname, lastname)
-		const newUser = await userRepository.createUser({
-			firstname,
-			lastname,
-			email,
-			password,
-			username,
-		})
-		return newUser
-	}
-
-	updateUser = async (
+	public async update(
 		query: IReadUser,
 		data: IUpdateUser,
-	): Promise<IUser | null> => {
+	): Promise<Partial<IUser> | null> {
 		const user = await userRepository.updateUser(query, data)
-		return user
+		return userPresenter.serialize(user, [])
 	}
 
-	deleteUser = async (query: IReadUser): Promise<boolean> => {
+	public async destroy(query: IReadUser): Promise<boolean> {
 		return await userRepository.destroy(query)
+	}
+
+	private _generateUsername(firstname: string, lastname: string): string {
+		let timestamp = new Date().getTime()
+		let code = `${timestamp}`.substring(9, 13)
+		const first = firstname.substring(0, 4)
+		const last = lastname.substring(0, 4)
+		return `${first.toLowerCase()}${last.toLowerCase()}${code}`
 	}
 }
 

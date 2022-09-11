@@ -1,31 +1,14 @@
 import { Router } from 'express'
 import catchErrors from '../../../library/utils/error-boundary'
 import { isAuthenticated } from '../../../library/middlewares'
-import postController from '../controllers/postController'
+import postController from '../controllers/PostController'
 
 const postRouter = Router()
 
-postRouter.get('/', isAuthenticated, catchErrors(postController.getPosts))
-postRouter.get('/:id', isAuthenticated, catchErrors(postController.getPostById))
-postRouter.post('/', isAuthenticated, catchErrors(postController.createPost))
-postRouter.put('/:id', isAuthenticated, catchErrors(postController.updatePost))
-postRouter.post(
-	'/like/:id',
-	isAuthenticated,
-	catchErrors(postController.toggleLikePost),
-)
-postRouter.post(
-	'/unlike/:id',
-	isAuthenticated,
-	catchErrors(postController.toggleLikePost),
-)
-postRouter.delete(
-	'/:id',
-	isAuthenticated,
-	catchErrors(postController.deletePost),
-)
-// postRouter.put('/upload/bg-img', isAuthenticated, catchErrors(postController.uploadBgImg))
-// postRouter.put('/upload/avatar', isAuthenticated, catchErrors(postController.uploadAvatar))
-// postRouter.delete('/:id' isAuthenticated, catchErrors(postController.deletePost))
+postRouter.get('/', isAuthenticated, catchErrors(postController.index))
+postRouter.get('/:id', isAuthenticated, catchErrors(postController.show))
+postRouter.post('/', isAuthenticated, catchErrors(postController.create))
+postRouter.put('/:id', isAuthenticated, catchErrors(postController.update))
+postRouter.delete('/:id', isAuthenticated, catchErrors(postController.destroy))
 
 export default postRouter

@@ -24,7 +24,7 @@ const isAuthenticated = async (
 		}
 
 		const decoded: any = jwtDecode(token)
-		const user = await userService.fetchOneUser({ email: decoded.email })
+		const user = await userService.read({ email: decoded.email })
 
 		if (!user) {
 			logger.error('User not registered or Invalid access token')

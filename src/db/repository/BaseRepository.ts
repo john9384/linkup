@@ -1,7 +1,8 @@
 import { ObjectId } from 'mongodb'
 import { PaginationOptions } from './types'
+import { IBaseRepository } from '../../types/db/IBaseRepository'
 
-class BaseRepository {
+class BaseRepository implements IBaseRepository {
 	Model: any
 
 	constructor(Model: any) {
@@ -27,7 +28,7 @@ class BaseRepository {
 		return models
 	}
 
-	async fetchOne<TRead, TReturn>(
+	async read<TRead, TReturn>(
 		query: TRead,
 		fields?: any,
 	): Promise<TReturn | null> {
@@ -46,7 +47,7 @@ class BaseRepository {
 	async update<TRead, TUpdate, TReturn>(
 		query: TRead,
 		data: TUpdate,
-	): Promise<TReturn | null> {
+	): Promise<TReturn> {
 		const queryObj = this._setQueryObj(query)
 		const model = await this.Model.findOneAndUpdate(queryObj, data, {
 			new: true,

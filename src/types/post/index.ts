@@ -1,0 +1,5 @@
+export { ICreatePost, IReadPost, IUpdatePost, IDestroyPost } from './IPostDTO'
+export { IPostRepository } from './IPostRepository'
+export { IPostPresenter } from './IPostPresenter'
+export { IPostService } from './IPostService'
+export { IPostController } from './IPostController'

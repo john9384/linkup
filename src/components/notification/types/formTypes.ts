@@ -1,11 +1,11 @@
-export interface ICreateNotification {
+export interface ICreateInAppNotification {
 	[key: string]: string | number | boolean
 }
 
-export interface IUpdateNotification {
+export interface IUpdateInAppNotification {
 	[key: string]: string | number | boolean
 }
 
-export interface IQueryNotification {
+export interface IReadInAppNotification {
 	[key: string]: string | number | boolean
 }

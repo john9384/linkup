@@ -1,0 +1,75 @@
+{
+  "auth":{
+    "signup": {
+      "errorResponses" :{
+           "emailConfirmed" : "Email already confirmed",
+           "emailNotFound" : "Email not found",
+           "invalidCredentials" : "Invalid email or password",
+           "logOutError" : {
+             "alreadyLoggedOut" : "User already logged out",
+             "cannotLogOut" : "Cannot logout user"
+                      },
+           "tokenError" : {
+             "invalidToken" : "Invalid access token"
+                          },
+           "userExists" : "User already registered",
+           "userNotRegistered" : "User not registered"
+          },
+      "successResponse" : {
+        "emailConfirmed" : "Email confirmed",
+        "logIn" : "Login successfull",
+        "logOut" : "Logout successfull",
+        "signUp" : "Signup successfull",
+        "tokenRefreshSuccess" : "Token refreshed successfully"
+          },
+      "validation": {
+         "confirmPassword":{
+             "confirmPasswordRequired" : "confirmPassword is required",
+             "confirmPasswordEmpty" : "confirmPassword is required"
+             },
+         "email" : {
+             "emailInvalid": "Email is invalid",
+             "emailRequired": "Email is required",
+             "emailEmpty": "Email is needed"
+               },
+         "firstName":{
+             "firstNameMin" : "Firstname must be at least 3 characters",
+             "firstNameMax" : "Firstname must be at most 50 characters",
+             "firstNameRequired" : "First name is required",
+             "firstNameEmpty" : "First name is required"
+                   },
+        "lastName":{
+             "lastNameMin" : "Last name must be at least 3 characters",
+             "lastNameMax" : "Last tname must be at most 50 characters",
+             "lastNameRequired" : "Last name is required",
+             "lastNameEmpty" : "Last name is required"
+                  },
+        "password":{
+             "passwordRequired" : "Password is required",
+             "passwordEmpty" : "Password is required",
+             "passwordMin" : "Password must be at least 8 characters",
+             "passwordMax" : "Password must be at most 70 characters",
+             "passwordRegex" : "Password must have a minimum (8) eight characters, at least one uppercase letter, one number and one special character is required",
+             "password.pattern.base" :"Password must have a minimum (8) eight characters, at least one uppercase letter, one number and one special character is required"
+                },
+             "phoneNumber":{
+             "phoneNumberRequired" : "phoneNumber is required",
+             "phoneNumberEmpty" : "phoneNumber is required",
+             "phoneNumberInvalid" : "phoneNumber invalid"
+                },
+       
+        "token" : {
+          "tokenRequired": "Token is required",
+          "tokenEmpty": "Token is required"
+        }
+
+      }
+
+    
+    }
+  },
+   "server": {
+    "initialize": "{{appName}} has been initialize",
+    "started": "Express Server listening on port: {{port}}"
+  }
+}

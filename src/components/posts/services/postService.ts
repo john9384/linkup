@@ -1,82 +1,56 @@
-import { IPost } from '../types/modelTypes'
-import { ICreatePost, IQueryPost, IUpdatePost } from '../types/formTypes'
-import postRepository from '../repositories/postRepository'
-import { PaginationOptions } from '../../../db/repository/types'
-import { userService } from '../../user/services/UserService'
+import _ from 'lodash'
+import postRepository from '../repositories/PostRepository'
+import { IPostService } from '../../../types/post/IPostService'
+import {
+	ICreatePost,
+	IDestroyPost,
+	IReadPost,
+	IUpdatePost,
+} from 'src/types/post/IPostDTO'
+import { IPost } from 'src/types/post/IPost'
+import { postPresenter } from '../presenters/PostPresenter'
+import { postDTO } from '../dtos/PostDTO'
 
-class PostService {
-	fetchPosts = async (
-		query?: IQueryPost,
-		pagination?: PaginationOptions,
-	): Promise<IPost[] | null> => {
-		if (pagination) {
-			const { page, limit } = pagination
-			const posts = await postRepository.fetchPosts(query, { page, limit })
+class PostService implements IPostService {
+	public async fetch(query?: IReadPost): Promise<Array<Partial<IPost>> | null> {
+		const dto = postDTO.read(query)
 
-			return posts
-		}
+		const pagination = _.pick(query, ['page', 'limit'])
 
-		const posts = await postRepository.fetchPosts(query)
+		const { page, limit } = pagination
+		const posts = await postRepository.fetchPosts(dto, { page, limit })
 		return posts
 	}
 
-	fetchOnePost = async (query: IQueryPost): Promise<IPost | null> => {
-		const post = await postRepository.fetchOnePost(query)
+	public async read(query: IReadPost): Promise<Partial<IPost> | null> {
+		const dto = postDTO.read(query)
+		const post = await postRepository.readPost(dto)
 
-		return post
+		return post ? postPresenter.serialize(post, []) : null
 	}
 
-	createPost = async (data: ICreatePost): Promise<IPost> => {
-		const userPayload = await userService.fetchOneUser({ id: data.userId }, [
-			'firstname',
-			'lastname',
-			'username',
-			'avatar',
-		])
-		const newPost = await postRepository.createPost({
-			user: userPayload,
-			...data,
-		})
+	public async create(data: ICreatePost): Promise<Partial<IPost>> {
+		const dto = await postDTO.create(data)
+		const newPost = await postRepository.createPost(dto)
 
-		return newPost
+		return postPresenter.serialize(newPost, [])
 	}
 
-	updatePost = async (
-		query: IQueryPost,
+	public async update(
+		query: IReadPost,
 		data: IUpdatePost,
-	): Promise<IPost | null> => {
-		const post = await postRepository.updatePost(query, data)
-		return post
+	): Promise<Partial<IPost>> {
+		const readDto = postDTO.read(query)
+		const updateDto = postDTO.update(data)
+
+		const post = await postRepository.updatePost(readDto, updateDto)
+		return postPresenter.serialize(post, [])
 	}
 
-	toggleLikePost = async (postId: string, userId: string) => {
-		let post = await postRepository.fetchOnePost({ id: postId })
-		if (!post) throw new Error('Post not found')
+	public async destroy(query: IDestroyPost): Promise<boolean> {
+		await postRepository.destroyPost(query.id)
 
-		if (post.likes.includes(userId)) {
-			post.likes = post.likes.filter((id: string) => id !== userId)
-			const updatedPost = await postRepository.updatePost(
-				{ id: postId },
-				{ likes: post.likes },
-			)
-			return updatedPost
-		}
-
-		post.likes.push(userId)
-		const updatedPost = await postRepository.updatePost(
-			{ id: postId },
-			{ likes: post.likes },
-		)
-
-		return updatedPost
-	}
-
-	deletePost = async (id: string) => {
-		await postRepository.deletePost(id)
-
-		return {
-			message: 'post deleted',
-		}
+		return true
 	}
 }
 

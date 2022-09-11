@@ -1,14 +1,21 @@
 import BaseRepository from '../../../db/repository/BaseRepository'
 import { User } from '../models/User'
-import { IUser, ICreateUser, IUpdateUser, IReadUser } from '../../../types/user'
+import {
+	IUser,
+	ICreateUser,
+	IUpdateUser,
+	IReadUser,
+	IDestroyUser,
+} from '../../../types/user'
+import { IUserRepository } from '../../../types/user/IUserRepository'
 
-class UserRepository extends BaseRepository {
-	fetchUsers = async (query?: IReadUser): Promise<IUser[] | null> => {
+class UserRepository extends BaseRepository implements IUserRepository {
+	fetchUsers = async (query?: IReadUser): Promise<IUser[]> => {
 		const users = await this.fetch<IReadUser, IUser[]>(query)
 		return users
 	}
-	fetchOneUser = async (query: IReadUser): Promise<IUser | null> => {
-		const user = await this.fetchOne<IReadUser, IUser>(query)
+	readUser = async (query: IReadUser): Promise<IUser | null> => {
+		const user = await this.read<IReadUser, IUser>(query)
 		return user
 	}
 
@@ -17,16 +24,17 @@ class UserRepository extends BaseRepository {
 		return newUser
 	}
 
-	updateUser = async (
-		query: IReadUser,
-		data: IUpdateUser,
-	): Promise<IUser | null> => {
+	updateUser = async (query: IReadUser, data: IUpdateUser): Promise<IUser> => {
 		const updatedUser = await this.update<IReadUser, IUpdateUser, IUser>(
 			query,
 			data,
 		)
 
 		return updatedUser
+	}
+	public async destroyUser(query: IDestroyUser): Promise<boolean> {
+		await this.destroy<IDestroyUser>(query)
+		return true
 	}
 }
 

@@ -1,8 +1,6 @@
-import { bcryptCompare, bcryptEncode } from '../../../library/helpers/bcrypt'
+import { bcryptCompare } from '../../../library/helpers/bcrypt'
 import { jwtEncode } from '../../../library/helpers/jwt'
 import { userRepository } from '../../user/repositories'
-import { otpService } from '../../otp'
-import { otpIsValid } from '../../otp/utils/is-valid-otp'
 import { userService } from '../../user'
 import {
 	IAuthService,
@@ -16,11 +14,12 @@ import { BadRequestError } from '../../../library/helpers'
 import { authDTO } from '../dtos'
 import { ILoginService } from '../../../types/auth/IAuthService'
 import { IUser } from '../../../types/user'
+import { otpService } from '../../notification/services/OtpService'
 
 class AuthService implements IAuthService {
 	public async signup(formData: ISignup): Promise<Partial<IUser>> {
 		const dto = authDTO.signup(formData)
-		const newUser: IUser = await userService.createUser(dto)
+		const newUser = await userService.create(dto)
 
 		otpService.request({
 			userId: newUser.id,
@@ -34,7 +33,7 @@ class AuthService implements IAuthService {
 
 	public async verifyEmail(formData: IAuthToken): Promise<Partial<IUser>> {
 		const dto = authDTO.verifyEmail(formData)
-		const otp = await otpIsValid(dto.token)
+		const otp = await otpService.validate(dto.token)
 
 		await userRepository.updateUser(
 			{ email: otp.transporter },
@@ -48,7 +47,7 @@ class AuthService implements IAuthService {
 
 	public async login(formData: ILogin): Promise<ILoginService> {
 		const dto = authDTO.login(formData)
-		const user = await userService.fetchOneUser({ email: dto.email }, [
+		const user = await userService.read({ email: dto.email }, [
 			'id',
 			'email',
 			'password',
@@ -77,11 +76,14 @@ class AuthService implements IAuthService {
 
 	public async forgotPassword(
 		formData: IForgotPassword,
-	): Promise<{ email: string; message: string }> {
+	): Promise<Partial<IUser>> {
 		const dto = authDTO.forgotPassword(formData)
-		const userExist = await userRepository.fetchOneUser({
-			email: dto.email,
-		})
+		const userExist = await userService.read(
+			{
+				email: dto.email,
+			},
+			['email'],
+		)
 
 		if (!userExist) {
 			throw new BadRequestError('Email supplied does not exist')
@@ -94,15 +96,12 @@ class AuthService implements IAuthService {
 			instance: 'LOGIN',
 		})
 
-		return {
-			email: userExist.email,
-			message: `Otp sent to your email ${userExist.email}`,
-		}
+		return { email: userExist.email }
 	}
 
 	public async verifyToken(formData: IAuthToken): Promise<Partial<IUser>> {
 		const dto = authDTO.verifyToken(formData)
-		const otp = await otpIsValid(dto.token)
+		const otp = await otpService.validate(dto.token)
 
 		return {
 			email: otp.transporter,
@@ -111,24 +110,23 @@ class AuthService implements IAuthService {
 
 	public async resetPassword(
 		formData: IResetPassword,
-	): Promise<{ message: string }> {
+	): Promise<Partial<IUser>> {
 		const dto = authDTO.resetPassword(formData)
-		const userExist = await userRepository.fetchOneUser({
-			email: dto.email,
-		})
+		const userExist = await userService.read({ email: dto.email }, [
+			'email',
+			'password',
+		])
 
 		if (!userExist) {
 			throw new BadRequestError('Invalid Email')
 		}
 
-		await userService.updateUser(
+		await userService.update(
 			{ email: userExist.email },
 			{ password: dto.newPassword },
 		)
 
-		return {
-			message: 'Password reset successful',
-		}
+		return { email: userExist.email }
 	}
 }
 

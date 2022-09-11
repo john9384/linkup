@@ -1,9 +1,11 @@
+import { IBaseRepository } from '../db'
 import { IUser } from './IUser'
 import { IReadUser, ICreateUser, IUpdateUser, IDestroyUser } from './IUserDTO'
 
-export interface IUserRepository {
-	create(query?: ICreateUser): Promise<Partial<IUser>>
-	read(query?: IReadUser): Promise<Array<Partial<IUser>> | null>
-	update(query?: IUpdateUser): Promise<Partial<IUser>>
-	destroy(query?: IDestroyUser): Promise<boolean>
+export interface IUserRepository extends IBaseRepository {
+	fetchUsers(query?: IReadUser): Promise<IUser[]>
+	createUser(query?: ICreateUser): Promise<Partial<IUser>>
+	readUser(query: IReadUser): Promise<IUser | null>
+	updateUser(query: IReadUser, data: IUpdateUser): Promise<IUser>
+	destroyUser(query?: IDestroyUser): Promise<boolean>
 }

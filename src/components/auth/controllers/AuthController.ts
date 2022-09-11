@@ -51,7 +51,7 @@ class AuthController implements IAuthController {
 
 	public async currentUser(req: Request, res: Response) {
 		const userId = req.userId
-		const responseData = await userService.fetchOneUser({ id: userId }, [])
+		const responseData = await userService.read({ id: userId }, [])
 
 		return new SuccessResponse('User fetched', responseData).send(res)
 	}

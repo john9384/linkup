@@ -1,6 +1,3 @@
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { ObjectId } from 'mongodb'
 import users from './users.json'
 import { bcryptEncode } from '../../library/helpers/bcrypt'

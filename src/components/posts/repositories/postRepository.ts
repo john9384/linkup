@@ -1,27 +1,34 @@
+import { IPost } from 'src/types/post/IPost'
+import {
+	IReadPost,
+	ICreatePost,
+	IUpdatePost,
+	IDestroyPost,
+} from 'src/types/post/IPostDTO'
 import BaseRepository from '../../../db/repository/BaseRepository'
 import { PaginationOptions } from '../../../db/repository/types'
-import { Post } from '../models/Post'
-import { ICreatePost, IUpdatePost, IQueryPost } from '../types/formTypes'
-import { IPost } from '../types/modelTypes'
+import { Post } from '../models'
+import { IPostRepository } from '../../../types/post/IPostRepository'
 
-class PostRepository extends BaseRepository {
+class PostRepository extends BaseRepository implements IPostRepository {
 	fetchPosts = async (
-		query?: IQueryPost,
+		query?: IReadPost,
 		pageOptions?: PaginationOptions,
-	): Promise<IPost[] | null> => {
+	): Promise<IPost[]> => {
 		const limit = pageOptions?.limit ? Number(pageOptions?.limit) : 10
 		const page = pageOptions?.page
 			? Number(pageOptions?.page) * Number(pageOptions?.limit)
 			: 0
-		const posts = await this.fetchAndPaginate<IQueryPost, IPost[]>(query, {
+		const posts = await this.fetchAndPaginate<IReadPost, IPost[]>(query, {
 			page,
 			limit,
 		})
 
 		return posts
 	}
-	fetchOnePost = async (query: IQueryPost): Promise<IPost | null> => {
-		const post = await this.fetchOne<IQueryPost, IPost>(query)
+
+	readPost = async (query: IReadPost): Promise<IPost | null> => {
+		const post = await this.read<IReadPost, IPost>(query)
 		return post
 	}
 
@@ -30,11 +37,8 @@ class PostRepository extends BaseRepository {
 		return newPost
 	}
 
-	updatePost = async (
-		query: IQueryPost,
-		data: IUpdatePost,
-	): Promise<IPost | null> => {
-		const updatedPost = await this.update<IQueryPost, IUpdatePost, IPost>(
+	updatePost = async (query: IReadPost, data: IUpdatePost): Promise<IPost> => {
+		const updatedPost = await this.update<IReadPost, IUpdatePost, IPost>(
 			query,
 			data,
 		)
@@ -42,8 +46,9 @@ class PostRepository extends BaseRepository {
 		return updatedPost
 	}
 
-	deletePost = async (id: string) => {
-		await this.destroy<IQueryPost>({ id })
+	public async destroyPost(query: IDestroyPost): Promise<boolean> {
+		await this.destroy<IDestroyPost>({ id: query.id })
+		return true
 	}
 }
 

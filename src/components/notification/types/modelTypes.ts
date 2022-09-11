@@ -1,3 +1,3 @@
-export interface INotification {
+export interface IInAppNotification {
 	[key: string]: any
 }

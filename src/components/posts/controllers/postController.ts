@@ -1,99 +1,47 @@
 import { Request, Response } from 'express'
-import { buildResponse } from '../../../library/utils/response-builder'
-import { OK } from '../../../library/constants/http-status'
-import postService from '../services/postService'
+import postService from '../services/PostService'
+import { IPostController } from '../../../types/post/IPostController'
+import { SuccessResponse } from '../../../library/helpers/response'
 
-class PostController {
-	// TODO
-	// add the id property to the post object being returned so it will be accessible in the front end
-	getPosts = async (req: Request, res: Response) => {
+class PostController implements IPostController {
+	public async index(req: Request, res: Response): Promise<any> {
 		const { page, limit } = req.query
 
-		const responseData = await postService.fetchPosts(
-			{},
-			{ page: Number(page), limit: Number(limit) },
-		)
-
-		return res.status(OK).send(
-			buildResponse({
-				success: true,
-				message: 'Post fetched',
-				data: responseData,
-			}),
-		)
+		const responseData = await postService.fetch(req.query)
+		return new SuccessResponse('Posts fetched', responseData).send(res)
 	}
 
-	getPostById = async (req: Request, res: Response) => {
+	public async show(req: Request, res: Response) {
 		const postId = req.params.id
-		const responseData = await postService.fetchOnePost({ id: postId })
+		const responseData = await postService.read({ id: postId })
 
-		return res.status(OK).send(
-			buildResponse({
-				success: true,
-				message: 'Ok',
-				data: responseData,
-			}),
-		)
+		return new SuccessResponse('Post Feteched', responseData).send(res)
 	}
 
-	createPost = async (req: Request, res: Response) => {
-		// Validate post
+	public async create(req: Request, res: Response) {
 		const userId = req.userId
 		const { content } = req.body
-		const responseData = await postService.createPost({
+		const responseData = await postService.create({
 			userId,
 			content,
-			images: [],
 		})
 
-		return res.status(OK).send(
-			buildResponse({
-				success: true,
-				message: 'Post created',
-				data: responseData,
-			}),
-		)
+		return new SuccessResponse('Post Created', responseData).send(res)
 	}
 
-	updatePost = async (req: Request, res: Response) => {
+	public async update(req: Request, res: Response) {
 		const postId = req.params.id
 		const formData = req.body
-		const responseData = await postService.updatePost({ id: postId }, formData)
+		const responseData = await postService.update({ id: postId }, formData)
 
-		return res.status(OK).send(
-			buildResponse({
-				success: true,
-				message: 'Ok',
-				data: responseData,
-			}),
-		)
+		return new SuccessResponse('Post Updated', responseData).send(res)
 	}
 
-	toggleLikePost = async (req: Request, res: Response) => {
+	public async destroy(req: Request, res: Response) {
 		const postId = req.params.id
-		const userId = req.userId
-		const responseData = await postService.toggleLikePost(postId, userId)
+		const responseData = await postService.destroy({ id: postId })
 
-		return res.status(OK).send(
-			buildResponse({
-				success: true,
-				message: 'Ok',
-				data: responseData,
-			}),
-		)
-	}
-
-	deletePost = async (req: Request, res: Response) => {
-		const postId = req.params.id
-		const responseData = await postService.deletePost(postId)
-
-		return res.status(OK).send(
-			buildResponse({
-				success: true,
-				message: 'Ok',
-				data: responseData,
-			}),
-		)
+		return new SuccessResponse('Post Deleted', responseData).send(res)
 	}
 }
 

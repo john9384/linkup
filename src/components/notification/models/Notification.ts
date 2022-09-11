@@ -1,7 +1,6 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { Schema, model } from 'mongoose'
 
-const notificationSchema = new Schema(
+const InAppNotificationSchema = new Schema(
 	{
 		userId: {
 			type: String,
@@ -17,4 +16,4 @@ const notificationSchema = new Schema(
 	},
 )
 
-export const Notification = model('notification', notificationSchema)
+export const InAppNotification = model('notification', InAppNotificationSchema)
