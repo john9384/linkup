@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import { IUser, ICreateUser, IReadUser, IUpdateUser } from '../../../types/user'
 import { userRepository } from '../repositories'
 import { BadRequestError } from '../../../library/helpers/error'

@@ -5,8 +5,6 @@ import { SuccessResponse } from '../../../library/helpers/response'
 
 class PostController implements IPostController {
 	public async index(req: Request, res: Response): Promise<any> {
-		const { page, limit } = req.query
-
 		const responseData = await postService.fetch(req.query)
 		return new SuccessResponse('Posts fetched', responseData).send(res)
 	}
@@ -32,6 +30,7 @@ class PostController implements IPostController {
 	public async update(req: Request, res: Response) {
 		const postId = req.params.id
 		const formData = req.body
+
 		const responseData = await postService.update({ id: postId }, formData)
 
 		return new SuccessResponse('Post Updated', responseData).send(res)

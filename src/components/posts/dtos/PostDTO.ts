@@ -7,11 +7,14 @@ import {
 	IReadPost,
 	IUpdatePost,
 } from '../../../types/post/IPostDTO'
+import _ from 'lodash'
 
 export class PostDTO implements IPostDTO {
 	public read(payload?: IReadPost): Partial<IReadPost> {
-		if (payload?.hasOwnObject('userId')) return { userId: payload.userId }
-		if (payload?.hasOwnObject('id')) return { id: payload?.id }
+		if (_.isEmpty(payload)) return {}
+
+		if (_.has(payload, 'userId')) return { userId: payload.userId }
+		if (_.has(payload, 'id')) return { id: payload?.id }
 
 		return {}
 	}
@@ -32,9 +35,10 @@ export class PostDTO implements IPostDTO {
 	}
 
 	public update(payload: IUpdatePost): IUpdatePost {
-		const { content } = payload
+		const { content, likes } = payload
 		return {
 			content,
+			likes,
 		}
 	}
 

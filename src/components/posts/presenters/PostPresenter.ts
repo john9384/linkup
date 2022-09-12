@@ -8,7 +8,7 @@ class PostPresenter implements IPostPresenter {
 		selectors: Array<keyof IPost> = [],
 	): Partial<IPost> {
 		const postEntity = {
-			id: postDocument.id,
+			id: postDocument._id,
 			userId: postDocument.userId,
 			user: postDocument.user,
 			content: postDocument.content,

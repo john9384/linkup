@@ -19,7 +19,8 @@ class PostService implements IPostService {
 
 		const { page, limit } = pagination
 		const posts = await postRepository.fetchPosts(dto, { page, limit })
-		return posts
+
+		return posts.map(post => postPresenter.serialize(post, []))
 	}
 
 	public async read(query: IReadPost): Promise<Partial<IPost> | null> {

@@ -42,6 +42,7 @@ export default (): Application => {
 	app.use((_req, _res, next) => next(new NotFoundError()))
 
 	// Middleware Error Handler
+	// eslint-disable-next-line no-unused-vars
 	app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
 		if (err instanceof ApiError) {
 			logger.error(err.stack)
