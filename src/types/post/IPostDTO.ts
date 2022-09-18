@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { IPost } from './IPost'
 
 export interface ICreatePost {
@@ -12,7 +13,7 @@ export interface IReadPost {
 	[key: string]: any
 }
 
-export interface IDestroyPost {
+export interface IDeletePost {
 	[key: string]: any
 }
 
@@ -20,5 +21,5 @@ export interface IPostDTO {
 	read(payload: IReadPost): Partial<IPost>
 	create(payload: ICreatePost): Promise<ICreatePost>
 	update(payload: IUpdatePost): IUpdatePost
-	destroy(payload: IDestroyPost): IDestroyPost
+	delete(payload: IDeletePost): IDeletePost
 }

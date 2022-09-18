@@ -1,1 +1,1 @@
-export { IBaseRepository } from './IBaseRepository'
+

@@ -9,6 +9,6 @@ postRouter.get('/', isAuthenticated, catchErrors(postController.index))
 postRouter.get('/:id', isAuthenticated, catchErrors(postController.show))
 postRouter.post('/', isAuthenticated, catchErrors(postController.create))
 postRouter.put('/:id', isAuthenticated, catchErrors(postController.update))
-postRouter.delete('/:id', isAuthenticated, catchErrors(postController.destroy))
+postRouter.delete('/:id', isAuthenticated, catchErrors(postController.delete))
 
-export default postRouter
+export { postRouter }

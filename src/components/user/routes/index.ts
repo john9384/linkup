@@ -8,6 +8,6 @@ const userRouter = Router()
 userRouter.get('/', isAuthenticated, catchErrors(userController.index))
 userRouter.get('/:id', isAuthenticated, catchErrors(userController.show))
 userRouter.put('/:id', isAuthenticated, catchErrors(userController.update))
-userRouter.delete('/:id', isAuthenticated, catchErrors(userController.destroy))
+userRouter.delete('/:id', isAuthenticated, catchErrors(userController.delete))
 
 export { userRouter }

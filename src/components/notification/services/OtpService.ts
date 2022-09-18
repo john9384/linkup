@@ -14,7 +14,7 @@ class OtpService implements IOtpService {
 			)
 		}
 
-		const otp = await otpRepository.readOtp({
+		const otp = await otpRepository.read({
 			transporter,
 			transporterType,
 			instance,
@@ -23,17 +23,21 @@ class OtpService implements IOtpService {
 		let newOtp
 
 		if (otp) {
-			newOtp = await otpRepository.updateOtp({
-				transporter,
-				transporterType,
-			})
+			const { token, tokenExpires } = this._generateOtp()
+			newOtp = await otpRepository.update(
+				{ userId, transporter, transporterType, instance },
+				{ token, tokenExpires },
+			)
 		} else {
-			newOtp = await otpRepository.createOtp({
+			const { token, tokenExpires } = this._generateOtp()
+			newOtp = await otpRepository.create({
 				userId,
 				transporter,
 				transporterType,
 				instance,
-			})
+				token,
+				tokenExpires,
+			} as IOtp)
 		}
 
 		if (transporterType === 'PHONE') {
@@ -47,18 +51,18 @@ class OtpService implements IOtpService {
 		// 	subject: 'Kago OTP service',
 		// 	to: otp.transporter,
 		// })
-
+		logger.info(newOtp)
 		return { [transporterType.toLowerCase()]: transporter }
 	}
 
 	validate = async (token: string): Promise<IOtp> => {
 		const otp = await this._otpIsValid(token)
-		await otpRepository.destroy({ token: otp.token })
+		await otpRepository.delete({ token: otp.token })
 		return otp
 	}
 
 	private async _otpIsValid(token: string): Promise<IOtp> {
-		const otp: IOtp | null = await otpRepository.readOtp({ token })
+		const otp: IOtp | null = await otpRepository.read({ token })
 
 		if (!otp) {
 			throw new BadRequestError('Invalid Token supplied')
@@ -67,7 +71,7 @@ class OtpService implements IOtpService {
 			throw new BadRequestError('Token Expired')
 		}
 
-		await otpRepository.destroyOtp({ id: otp.id })
+		await otpRepository.delete({ id: otp.id })
 
 		return otp
 	}
@@ -78,6 +82,15 @@ class OtpService implements IOtpService {
 		if (timeDiff <= 0) return true
 
 		return false
+	}
+	private _generateOtp(): { token: string; tokenExpires: string } {
+		const token = Math.floor(100000 + Math.random() * 900000)
+		const tokenExpires = Date.now() + 300000
+
+		return {
+			token: String(token),
+			tokenExpires: String(tokenExpires),
+		}
 	}
 }
 

@@ -15,11 +15,14 @@ export interface IUpdateUser {
 export interface IReadUser {
 	id?: string
 	email?: string
+	username?: string
 }
 
-export interface IDestroyUser {
+export interface IDeleteUser {
 	[key: string]: any
 }
 export interface IUserDTO {
+	read(payload: IReadUser): Partial<IUser>
 	create(payload: ICreateUser): Partial<IUser>
+	update(payload: IUpdateUser): Partial<IUser>
 }

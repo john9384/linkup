@@ -1,9 +1,9 @@
 import express, { Request, Response } from 'express'
-import { authRouter } from '../components/auth/routes'
-import { userRouter } from '../components/user/routes'
-import postRouter from '../components/posts/routes/postRoutes'
 import config from '../config'
 import { logger } from '../library/helpers'
+import { authRouter } from '../components/auth/routes'
+import { userRouter } from '../components/user/routes'
+import { postRouter, commentRouter } from '../components/posts/routes'
 
 const router = express.Router()
 
@@ -20,5 +20,6 @@ router.get('/', (req: Request, res: Response) => {
 router.use(`/${PREFIX}/auth`, authRouter)
 router.use(`/${PREFIX}/users`, userRouter)
 router.use(`/${PREFIX}/posts`, postRouter)
+router.use(`/${PREFIX}/comments`, commentRouter)
 
 export default router

@@ -1,9 +1,9 @@
 import _ from 'lodash'
-import postRepository from '../repositories/PostRepository'
+import { postRepository } from '../repositories'
 import { IPostService } from '../../../types/post/IPostService'
 import {
 	ICreatePost,
-	IDestroyPost,
+	IDeletePost,
 	IReadPost,
 	IUpdatePost,
 } from 'src/types/post/IPostDTO'
@@ -18,21 +18,21 @@ class PostService implements IPostService {
 		const pagination = _.pick(query, ['page', 'limit'])
 
 		const { page, limit } = pagination
-		const posts = await postRepository.fetchPosts(dto, { page, limit })
+		const posts = await postRepository.fetchAndPaginate(dto, { page, limit })
 
 		return posts.map(post => postPresenter.serialize(post, []))
 	}
 
 	public async read(query: IReadPost): Promise<Partial<IPost> | null> {
 		const dto = postDTO.read(query)
-		const post = await postRepository.readPost(dto)
+		const post = await postRepository.read(dto)
 
 		return post ? postPresenter.serialize(post, []) : null
 	}
 
 	public async create(data: ICreatePost): Promise<Partial<IPost>> {
 		const dto = await postDTO.create(data)
-		const newPost = await postRepository.createPost(dto)
+		const newPost = await postRepository.create(dto)
 
 		return postPresenter.serialize(newPost, [])
 	}
@@ -44,15 +44,16 @@ class PostService implements IPostService {
 		const readDto = postDTO.read(query)
 		const updateDto = postDTO.update(data)
 
-		const post = await postRepository.updatePost(readDto, updateDto)
+		const post = await postRepository.update(readDto, updateDto)
 		return postPresenter.serialize(post, [])
 	}
 
-	public async destroy(query: IDestroyPost): Promise<boolean> {
-		await postRepository.destroyPost(query.id)
+	public async delete(query: IDeletePost): Promise<boolean> {
+		const dto = postDTO.delete(query)
+		await postRepository.delete(dto)
 
 		return true
 	}
 }
 
-export default new PostService()
+export const postService = new PostService()

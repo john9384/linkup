@@ -1,17 +1,17 @@
 import { Request, Response } from 'express'
 import { SuccessResponse } from '../../../library/helpers/response'
-import { inAppNotificationService } from '../services/InAppNotificationService'
+import { notificationService } from '../services/NotificationService'
 
 class NotificationController {
 	getNotifications = async (req: Request, res: Response) => {
-		const responseData = await inAppNotificationService.fetchNotifications()
+		const responseData = await notificationService.fetch()
 
 		return new SuccessResponse('Notifications fetched', responseData).send(res)
 	}
 
 	getNotificationById = async (req: Request, res: Response) => {
 		const userId = req.params.id
-		const responseData = await inAppNotificationService.fetchOneNotification({
+		const responseData = await notificationService.read({
 			id: userId,
 		})
 
@@ -21,7 +21,7 @@ class NotificationController {
 	updateNotification = async (req: Request, res: Response) => {
 		const userId = req.params.id
 
-		const responseData = await inAppNotificationService.updateNotification(
+		const responseData = await notificationService.update(
 			{ id: userId },
 			req.body,
 		)

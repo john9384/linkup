@@ -1,5 +1,3 @@
-import { Document } from 'mongoose'
-
 export interface IUser {
 	id: string
 	firstname: string

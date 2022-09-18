@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose'
+import { IOtp } from '../../../types/notification'
 
 const otpSchema = new Schema(
 	{
@@ -38,4 +39,4 @@ const otpSchema = new Schema(
 	},
 )
 
-export const Otp = model('otp', otpSchema)
+export const Otp = model<IOtp>('otp', otpSchema)

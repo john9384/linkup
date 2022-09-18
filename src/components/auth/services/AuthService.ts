@@ -35,7 +35,7 @@ class AuthService implements IAuthService {
 		const dto = authDTO.verifyEmail(formData)
 		const otp = await otpService.validate(dto.token)
 
-		await userRepository.updateUser(
+		await userRepository.update(
 			{ email: otp.transporter },
 			{ emailVerified: true },
 		)

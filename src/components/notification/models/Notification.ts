@@ -1,6 +1,7 @@
 import { Schema, model } from 'mongoose'
+import { INotification } from '../../../types/notification'
 
-const InAppNotificationSchema = new Schema(
+const NotificationSchema = new Schema(
 	{
 		userId: {
 			type: String,
@@ -16,4 +17,7 @@ const InAppNotificationSchema = new Schema(
 	},
 )
 
-export const InAppNotification = model('notification', InAppNotificationSchema)
+export const Notification = model<INotification>(
+	'notification',
+	NotificationSchema,
+)

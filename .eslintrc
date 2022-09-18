@@ -22,9 +22,10 @@
 	},
 	"overrides": [
 		{
-			"files": ["src/scripts/*.ts", "src/views/*.ts"],
+			"files": ["src/scripts/*.ts", "src/views/*.ts", "src/types/**/*.ts"],
 			"rules": {
 				"no-console": "off",
+				"no-unused-vars": "off",
 				"quotes": "off",
 				"@typescript-eslint/quotes": "off"
 			}

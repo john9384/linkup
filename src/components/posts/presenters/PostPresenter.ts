@@ -1,14 +1,15 @@
 import _ from 'lodash'
-import { IPost } from 'src/types/post/IPost'
-import { IPostPresenter } from 'src/types/post/IPostPresenter'
+import { IPost, IPostPresenter } from '../../../types/post'
 
 class PostPresenter implements IPostPresenter {
 	public serialize(
-		postDocument: IPost,
+		postDocument: IPost | null,
 		selectors: Array<keyof IPost> = [],
 	): Partial<IPost> {
+		if (!postDocument) return {}
+
 		const postEntity = {
-			id: postDocument._id,
+			id: postDocument.id,
 			userId: postDocument.userId,
 			user: postDocument.user,
 			content: postDocument.content,

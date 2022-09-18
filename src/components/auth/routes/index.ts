@@ -1,11 +1,7 @@
 import { Request, Response, Router } from 'express'
 import { authController } from '../controllers'
 import schema from './schemas'
-import {
-	validator,
-	ValidationSource,
-	isAuthenticated,
-} from '../../../library/middlewares'
+import { validator, isAuthenticated } from '../../../library/middlewares'
 import { catchErrors } from '../../../library/helpers'
 
 const authRouter = Router()

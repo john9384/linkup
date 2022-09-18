@@ -27,9 +27,9 @@ class UserController implements IUserController {
 		return new SuccessResponse('User fetched', responseData).send(res)
 	}
 
-	public async destroy(req: Request, res: Response) {
+	public async delete(req: Request, res: Response) {
 		const id = req.params.id
-		const responseData = await userService.destroy({ id })
+		const responseData = await userService.delete({ id })
 
 		return new SuccessResponse('User fetched', responseData).send(res)
 	}

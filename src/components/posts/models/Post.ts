@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose'
+import { IPost } from '../../../types/post'
 
 const postSchema = new Schema(
 	{
@@ -55,4 +56,4 @@ const postSchema = new Schema(
 	},
 )
 
-export const Post = model('post', postSchema)
+export const Post = model<IPost>('post', postSchema)

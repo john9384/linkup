@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose'
+import { IComment } from '../../../types/post'
 
 const commentSchema = new Schema(
 	{
@@ -27,4 +28,4 @@ const commentSchema = new Schema(
 	},
 )
 
-export const Comment = model('comment', commentSchema)
+export const Comment = model<IComment>('comment', commentSchema)

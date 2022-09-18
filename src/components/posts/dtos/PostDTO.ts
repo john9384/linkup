@@ -1,20 +1,19 @@
 import { userService } from '../../user'
-
 import {
 	ICreatePost,
-	IDestroyPost,
+	IDeletePost,
 	IPostDTO,
 	IReadPost,
 	IUpdatePost,
 } from '../../../types/post/IPostDTO'
-import _ from 'lodash'
 
 export class PostDTO implements IPostDTO {
 	public read(payload?: IReadPost): Partial<IReadPost> {
-		if (_.isEmpty(payload)) return {}
+		if (!payload) return {}
+		const { userId, id } = payload
 
-		if (_.has(payload, 'userId')) return { userId: payload.userId }
-		if (_.has(payload, 'id')) return { id: payload?.id }
+		if (userId) return { userId }
+		if (id) return { id }
 
 		return {}
 	}
@@ -31,6 +30,7 @@ export class PostDTO implements IPostDTO {
 			userId,
 			content,
 			images: [],
+			videos: [],
 		}
 	}
 
@@ -42,7 +42,7 @@ export class PostDTO implements IPostDTO {
 		}
 	}
 
-	public destroy(payload: IDestroyPost): IDestroyPost {
+	public delete(payload: IDeletePost): IDeletePost {
 		return {
 			id: payload.id,
 		}

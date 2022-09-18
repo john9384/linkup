@@ -1,66 +1,71 @@
+import { Model, FilterQuery, HydratedDocument, UpdateQuery } from 'mongoose'
 import { ObjectId } from 'mongodb'
 import { PaginationOptions } from './types'
-import { IBaseRepository } from '../../types/db/IBaseRepository'
+import { IBaseRepository } from '../interface/IBaseRepository'
 
-class BaseRepository implements IBaseRepository {
-	Model: any
+class BaseRepository<T> implements IBaseRepository<T> {
+	private _model: Model<T>
 
-	constructor(Model: any) {
-		this.Model = Model
+	constructor(model: Model<T>) {
+		this._model = model
 	}
 
-	async fetch<TRead, TReturn>(query?: TRead, fields?: any): Promise<TReturn> {
+	async fetch(
+		query?: FilterQuery<T>,
+		fields?: string[],
+	): Promise<Array<HydratedDocument<T>>> {
 		const queryObj = this._setQueryObj(query)
-		const models = await this.Model.find(queryObj).select(fields)
+		const models = await this._model.find(queryObj).select(fields)
 		return models
 	}
 
-	async fetchAndPaginate<TRead, TReturn>(
-		query?: TRead,
+	async fetchAndPaginate(
+		query?: FilterQuery<T>,
 		pagination?: PaginationOptions,
-	): Promise<TReturn> {
+	): Promise<Array<HydratedDocument<T>>> {
 		const queryObj = this._setQueryObj(query)
-		const models = await this.Model.find(queryObj)
+		const models = await this._model
+			.find(queryObj)
 			.sort({ createdAt: -1 })
-			.skip(pagination?.page)
-			.limit(pagination?.limit)
+			.skip(Number(pagination?.page))
+			.limit(Number(pagination?.limit))
 
 		return models
 	}
 
-	async read<TRead, TReturn>(
-		query: TRead,
-		fields?: any,
-	): Promise<TReturn | null> {
+	async read(
+		query: FilterQuery<T>,
+		fields?: string[],
+	): Promise<HydratedDocument<T> | null> {
 		const queryObj = this._setQueryObj(query)
 
-		const model = await this.Model.findOne(queryObj).select(fields)
+		const model = await this._model.findOne(queryObj).select(fields)
 		return model
 	}
 
-	async create<TCreate, TReturn>(data: TCreate): Promise<TReturn> {
-		const model = await this.Model.create(data)
+	async create(payload: T): Promise<HydratedDocument<T>> {
+		const model = await this._model.create(payload)
 
 		return model
 	}
 
-	async update<TRead, TUpdate, TReturn>(
-		query: TRead,
-		data: TUpdate,
-	): Promise<TReturn> {
+	async update(
+		query: FilterQuery<T>,
+		payload: UpdateQuery<T>,
+	): Promise<HydratedDocument<T> | null> {
 		const queryObj = this._setQueryObj(query)
-		const model = await this.Model.findOneAndUpdate(queryObj, data, {
+		const model = await this._model.findOneAndUpdate(queryObj, payload, {
 			new: true,
 		})
 
-		await model.save()
+		await model?.save()
 
 		return model
 	}
 
-	async destroy<TRead>(query: TRead): Promise<boolean> {
+	async delete<TRead>(query: TRead): Promise<boolean> {
 		const queryObj = this._setQueryObj(query)
-		await this.Model.deleteOne(queryObj)
+		await this._model.deleteOne(queryObj)
 
 		return true
 	}

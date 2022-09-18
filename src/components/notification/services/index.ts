@@ -1,2 +1,2 @@
 export { otpService } from './OtpService'
-export { inAppNotificationService } from './InAppNotificationService'
+export { notificationService } from './NotificationService'

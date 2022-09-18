@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import postService from '../services/PostService'
+import { postService } from '../services'
 import { IPostController } from '../../../types/post/IPostController'
 import { SuccessResponse } from '../../../library/helpers/response'
 
@@ -17,6 +17,7 @@ class PostController implements IPostController {
 	}
 
 	public async create(req: Request, res: Response) {
+		// TODO: uploading media files with post
 		const userId = req.userId
 		const { content } = req.body
 		const responseData = await postService.create({
@@ -36,9 +37,10 @@ class PostController implements IPostController {
 		return new SuccessResponse('Post Updated', responseData).send(res)
 	}
 
-	public async destroy(req: Request, res: Response) {
+	public async delete(req: Request, res: Response) {
+		// TODO: Ensure the correct user has delete permission
 		const postId = req.params.id
-		const responseData = await postService.destroy({ id: postId })
+		const responseData = await postService.delete({ id: postId })
 
 		return new SuccessResponse('Post Deleted', responseData).send(res)
 	}

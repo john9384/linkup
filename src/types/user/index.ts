@@ -5,7 +5,7 @@ export {
 	ICreateUser,
 	IUpdateUser,
 	IReadUser,
-	IDestroyUser,
+	IDeleteUser,
 	IUserDTO,
 } from './IUserDTO'
 export { IUserService } from './IUserService'
