@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { IFriendRequestController } from 'types/user/friendRequest/IFriendRequestController'
+import { IFriendRequestController } from '../../../types/user/friendRequest/IFriendRequestController'
 import { SuccessResponse } from '../../../library/helpers/response'
 
 class FriendRequestController implements IFriendRequestController {

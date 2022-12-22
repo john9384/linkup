@@ -1,4 +1,4 @@
-import { PaginationOptions } from 'db/repository/types'
+import { PaginationOptions } from '../../../db/repository/types'
 import { INotification } from './INotification'
 import {
 	ICreateNotification,

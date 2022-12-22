@@ -4,7 +4,7 @@ import {
 	INotification,
 	ICreateNotification,
 	IUpdateNotification,
-} from 'types/notification'
+} from '../../../types/notification'
 import { notificationRepository } from '../repositories/NotificationRepository'
 
 class NotificationService {

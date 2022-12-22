@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { Query, UpdateQuery, FilterQuery, HydratedDocument } from 'mongoose'
+import { UpdateQuery, FilterQuery, HydratedDocument } from 'mongoose'
 
 export interface Write<T> {
 	create: (payload: T) => Promise<HydratedDocument<T>>

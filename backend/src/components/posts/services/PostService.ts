@@ -6,8 +6,8 @@ import {
 	IDeletePost,
 	IReadPost,
 	IUpdatePost,
-} from 'types/post/IPostDTO'
-import { IPost } from 'types/post/IPost'
+} from '../../../types/post/IPostDTO'
+import { IPost } from '../../../types/post/IPost'
 import { postPresenter } from '../presenters/PostPresenter'
 import { postDTO } from '../dtos/PostDTO'
 

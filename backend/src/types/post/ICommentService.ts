@@ -1,4 +1,4 @@
-import { PaginationOptions } from 'db/repository/types'
+import { PaginationOptions } from '../../db/repository/types'
 import { IComment } from './IComment'
 import {
 	ICreateComment,

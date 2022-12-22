@@ -1,5 +1,8 @@
-import BaseRepository from 'db/repository/BaseRepository'
-import { INotification, INotificationRepository } from 'types/notification'
+import BaseRepository from '../../../db/repository/BaseRepository'
+import {
+	INotification,
+	INotificationRepository,
+} from '../../../types/notification'
 import { Notification } from '../models/Notification'
 
 class NotificationRepository

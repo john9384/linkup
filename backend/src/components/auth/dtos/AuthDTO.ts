@@ -8,7 +8,7 @@ import {
 	IResetPassword,
 	ISignup,
 } from '../../../types/auth'
-import { IUser, ICreateUser } from '../../../types/user'
+import { ICreateUser } from '../../../types/user'
 
 class AuthDTO implements IAuthDTO {
 	public signup(payload: ISignup): ICreateUser {

@@ -1,0 +1,50 @@
+{
+  "folders": [
+    {
+      "name": "linkup",
+      "path": "/Users/a/Documents/GitHub/linkup"
+    }
+  ],
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "backend",
+        "type": "shell",
+        "command": "yarn watch",
+        "options": {
+          "cwd": "../backend"
+        },
+        "group": "none",
+        "presentation": {
+          "reveal": "always",
+          "panel": "new"
+        },
+        "runOptions": {
+          "runOn": "folderOpen"
+        }
+      },
+      {
+        "label": "frontend",
+        "type": "shell",
+        "command": "yarn start",
+        "options": {
+          "cwd": "../frontend"
+        },
+        "group": "none",
+        "presentation": {
+          "reveal": "always",
+          "panel": "new"
+        },
+        "runOptions": {
+          "runOn": "folderOpen"
+        }
+      }
+    ]
+  },
+  "settings": {
+    "editor.tabSize": 2,
+    "editor.fontFamily": "Fira Code",
+    "editor.indentSize": "tabSize"
+  }
+}

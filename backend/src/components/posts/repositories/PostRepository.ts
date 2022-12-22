@@ -1,4 +1,4 @@
-import { IPost } from 'types/post/IPost'
+import { IPost } from '../../../types/post/IPost'
 import BaseRepository from '../../../db/repository/BaseRepository'
 import { Post } from '../models'
 import { IPostRepository } from '../../../types/post/IPostRepository'

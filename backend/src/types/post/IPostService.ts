@@ -1,4 +1,4 @@
-import { PaginationOptions } from 'db/repository/types'
+import { PaginationOptions } from '../../db/repository/types'
 import { IPost } from './IPost'
 import { ICreatePost, IDeletePost, IReadPost, IUpdatePost } from './IPostDTO'
 

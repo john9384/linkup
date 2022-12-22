@@ -1,5 +1,4 @@
 import { bcryptCompare } from '../../../library/helpers/bcrypt'
-import { jwtEncode } from 'library/helpers/jwt'
 import { userRepository } from '../../user/repositories'
 import { userService } from '../../user'
 import {
@@ -10,7 +9,7 @@ import {
 	IResetPassword,
 	ISignup,
 } from '../../../types/auth'
-import { BadRequestError } from '../../../library/helpers'
+import { BadRequestError, jwtEncode } from '../../../library/helpers'
 import { authDTO } from '../dtos'
 import { ILoginService } from '../../../types/auth/IAuthService'
 import { IUser } from '../../../types/user'
