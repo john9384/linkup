@@ -20,9 +20,11 @@ class PostController implements IPostController {
 		// TODO: uploading media files with post
 		const userId = req.userId
 		const { content } = req.body
+		const files = req.files
 		const responseData = await postService.create({
 			userId,
 			content,
+			files,
 		})
 
 		return new SuccessResponse('Post Created', responseData).send(res)

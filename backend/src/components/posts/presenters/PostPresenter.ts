@@ -14,6 +14,7 @@ class PostPresenter implements IPostPresenter {
 			user: postDocument.user,
 			content: postDocument.content,
 			images: postDocument.images,
+			videos: postDocument.videos,
 			likes: postDocument.likes,
 			comments: postDocument.comments,
 			commentCount: postDocument.commentCount,

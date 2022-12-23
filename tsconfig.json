@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "es2019",
+    "module": "commonjs",
+    "noImplicitAny": true,
+    "alwaysStrict": true,
+    "noUnusedLocals": true,
+    "noImplicitReturns": true,
+    "strictNullChecks": true,
+    "noFallthroughCasesInSwitch": true,
+    "strictFunctionTypes": false,
+    "noImplicitThis": false,
+    "moduleResolution": "node",
+    "resolveJsonModule": true
+  }
+}

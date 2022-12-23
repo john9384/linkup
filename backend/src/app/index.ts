@@ -12,6 +12,8 @@ import {
 	InternalError,
 } from '../library/helpers'
 import express, { Application, Request, Response, NextFunction } from 'express'
+import multer from 'multer'
+import { fileFilter, fileStorage } from '../library/middlewares/multer'
 
 export default (): Application => {
 	process.on('uncaughtException', e => {
@@ -33,6 +35,9 @@ export default (): Application => {
 	)
 	app.use('/', express.static(path.join(__dirname, 'app/public')))
 	app.set('view engine', 'html')
+	app.use(
+		multer({ storage: fileStorage, fileFilter: fileFilter }).array('image'),
+	)
 	app.use(cookieParser())
 	app.use(helmet())
 	app.set('trust proxy', 1)
